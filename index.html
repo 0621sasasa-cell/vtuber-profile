@@ -1,813 +1,271 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VTuberプロフィール</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
-<style>
-/* ===== CSS VARIABLES ===== */
-:root {
-  --primary: #ff6eb4;
-  --primary-light: #ffb3d9;
-  --secondary: #a78bfa;
-  --accent: #fbbf24;
-  --accent2: #34d399;
-  --bg-dark: #0d0a1a;
-  --bg-mid: #1a1030;
-  --bg-card: rgba(255,255,255,0.06);
-  --text: #fdf4ff;
-  --text-muted: #c4b5d8;
-  --border: rgba(255,110,180,0.25);
-  --glow: 0 0 30px rgba(255,110,180,0.4);
-  --font-main: 'M PLUS Rounded 1c', sans-serif;
-  --font-accent: 'Zen Maru Gothic', sans-serif;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--font-main);
-  background: var(--bg-dark);
-  color: var(--text);
-  overflow-x: hidden;
-  line-height: 1.7;
-}
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 20% 20%, rgba(167,139,250,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(255,110,180,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(26,16,48,0.8) 0%, #0d0a1a 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-.stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-.star {
-  position: absolute;
-  border-radius: 50%;
-  background: white;
-  animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
-}
-@keyframes twinkle {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.3); }
-}
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-dark); }
-::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-
-/* ===== LOADING ===== */
-#loading-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  background: var(--bg-dark);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-#loading-screen.hidden { opacity: 0; visibility: hidden; }
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 3px solid rgba(255,110,180,0.2);
-  border-top-color: var(--primary);
-  animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-text {
-  font-family: var(--font-accent);
-  font-size: 1rem;
-  color: var(--primary-light);
-  font-weight: 700;
-}
-.loading-dot {
-  display: inline-block;
-  animation: loadDot 1.4s ease-in-out infinite;
-}
-.loading-dot:nth-child(2) { animation-delay: 0.2s; }
-.loading-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes loadDot { 0%,80%,100%{opacity:0.2;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
-
-/* ===== ERROR BANNER ===== */
-#error-banner {
-  display: none;
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 200;
-  background: rgba(239,68,68,0.15);
-  border: 1px solid rgba(239,68,68,0.4);
-  color: #fca5a5;
-  padding: 12px 24px;
-  border-radius: 12px;
-  font-size: 0.88rem;
-  font-weight: 700;
-  backdrop-filter: blur(10px);
-  max-width: 90vw;
-  text-align: center;
-}
-
-/* ===== NAVIGATION ===== */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 14px 20px;
-  background: rgba(13,10,26,0.85);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.nav-logo {
-  font-family: var(--font-accent);
-  font-weight: 900;
-  font-size: 1.1rem;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.nav-links { display: flex; gap: 6px; list-style: none; flex-wrap: wrap; justify-content: flex-end; }
-.nav-links a {
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: 0.78rem;
-  padding: 5px 10px;
-  border-radius: 20px;
-  transition: all 0.25s;
-  font-weight: 700;
-}
-.nav-links a:hover { color: var(--primary); background: rgba(255,110,180,0.12); }
-
-/* ===== HERO ===== */
-#hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 100px 20px 60px;
-  text-align: center;
-  z-index: 1;
-}
-.hero-avatar-wrap { position: relative; width: 200px; height: 200px; margin: 0 auto 28px; }
-.hero-avatar-ring {
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  background: conic-gradient(var(--primary), var(--secondary), var(--accent), var(--primary));
-  animation: ringSpinAnim 4s linear infinite;
-}
-@keyframes ringSpinAnim { to { transform: rotate(360deg); } }
-.hero-avatar-ring::after {
-  content: '';
-  position: absolute;
-  inset: 4px;
-  border-radius: 50%;
-  background: var(--bg-dark);
-}
-.hero-avatar {
-  position: relative;
-  z-index: 2;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2a1850, #1a1030);
-  border: 3px solid rgba(255,110,180,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 80px;
-  overflow: hidden;
-  box-shadow: var(--glow);
-}
-.hero-name {
-  font-family: var(--font-accent);
-  font-size: clamp(2.4rem, 8vw, 4rem);
-  font-weight: 900;
-  background: linear-gradient(135deg, #ff9de2, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1.2;
-  animation: fadeUp 0.8s ease both;
-}
-.hero-ruby { font-size: clamp(0.9rem, 3vw, 1.2rem); color: var(--text-muted); letter-spacing: 0.3em; margin-bottom: 6px; animation: fadeUp 0.8s 0.1s ease both; }
-.hero-tagline { font-size: clamp(0.95rem, 3.5vw, 1.25rem); color: var(--primary-light); margin: 12px 0 24px; font-weight: 700; animation: fadeUp 0.8s 0.2s ease both; }
-.hero-tags { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 28px; animation: fadeUp 0.8s 0.3s ease both; }
-.tag { background: rgba(255,110,180,0.15); border: 1px solid var(--border); color: var(--primary-light); padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
-.tag.purple { background: rgba(167,139,250,0.15); border-color: rgba(167,139,250,0.3); color: #c4b5fa; }
-.tag.yellow { background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.3); color: #fde68a; }
-.hero-sns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.8s 0.4s ease both; }
-.sns-btn { display: flex; align-items: center; gap: 7px; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 0.88rem; transition: all 0.25s; border: 2px solid transparent; }
-.sns-btn.twitter { background: #1da1f2; color: white; }
-.sns-btn.youtube { background: #ff0000; color: white; }
-.sns-btn.tiktok  { background: #010101; color: white; border-color: #69c9d0; }
-.sns-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-/* ===== SECTIONS ===== */
-section { position: relative; z-index: 1; padding: 70px 20px; max-width: 900px; margin: 0 auto; }
-.section-title {
-  font-family: var(--font-accent);
-  font-size: clamp(1.5rem, 5vw, 2.2rem);
-  font-weight: 900;
-  text-align: center;
-  margin-bottom: 40px;
-}
-.section-title .en { display: block; font-size: 0.45em; letter-spacing: 0.2em; color: var(--primary); font-family: var(--font-main); font-weight: 700; margin-top: 4px; text-align: center; }
-.section-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 auto; max-width: 900px; }
-
-/* ===== PROFILE ===== */
-.profile-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 32px; backdrop-filter: blur(10px); }
-.profile-info-row { display: flex; gap: 12px; align-items: flex-start; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.07); }
-.profile-info-row:last-child { border-bottom: none; padding-bottom: 0; }
-.info-label { min-width: 90px; font-size: 0.78rem; font-weight: 800; color: var(--primary); background: rgba(255,110,180,0.12); padding: 3px 10px; border-radius: 10px; text-align: center; white-space: nowrap; margin-top: 2px; }
-.info-value { color: var(--text); font-size: 0.95rem; }
-.genre-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-
-/* ===== STATS ===== */
-.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 30px; }
-.stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 20px 16px; text-align: center; transition: transform 0.25s; }
-.stat-card:hover { transform: translateY(-4px); }
-.stat-num { font-family: var(--font-accent); font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 700; margin-top: 4px; }
-.collab-list { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
-.collab-item { padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 12px; font-size: 0.9rem; }
-.collab-item:last-child { border-bottom: none; }
-.collab-badge { font-size: 0.72rem; font-weight: 800; padding: 2px 10px; border-radius: 10px; white-space: nowrap; }
-.collab-badge.コラボ  { background: rgba(167,139,250,0.2); color: #c4b5fa; }
-.collab-badge.イベント{ background: rgba(251,191,36,0.2);  color: #fde68a; }
-.collab-badge.受賞    { background: rgba(52,211,153,0.2);  color: #6ee7b7; }
-
-/* ===== VIDEOS ===== */
-.video-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-.video-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: transform 0.25s; }
-.video-card:hover { transform: translateY(-4px); }
-.video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
-.video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-.video-info { padding: 14px 16px; }
-.video-title { font-weight: 800; font-size: 0.95rem; margin-bottom: 4px; }
-.video-meta { font-size: 0.78rem; color: var(--text-muted); }
-
-/* ===== SCHEDULE ===== */
-.schedule-list { display: flex; flex-direction: column; gap: 12px; }
-.schedule-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px; display: flex; gap: 16px; align-items: center; transition: all 0.25s; }
-.schedule-item:hover { border-color: var(--primary); background: rgba(255,110,180,0.06); }
-.schedule-date { text-align: center; min-width: 52px; }
-.schedule-month { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; }
-.schedule-day { font-family: var(--font-accent); font-size: 1.8rem; font-weight: 900; color: var(--primary); line-height: 1; }
-.schedule-divider { width: 1px; background: var(--border); height: 40px; }
-.schedule-content { flex: 1; }
-.schedule-title-text { font-weight: 800; font-size: 0.95rem; }
-.schedule-time { font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; }
-.schedule-type { font-size: 0.72rem; font-weight: 800; padding: 2px 10px; border-radius: 10px; white-space: nowrap; align-self: flex-start; margin-top: 2px; }
-.schedule-type.LIVE    { background: rgba(255,110,180,0.2); color: var(--primary-light); }
-.schedule-type.コラボ  { background: rgba(167,139,250,0.2); color: #c4b5fa; }
-.schedule-type.イベント{ background: rgba(251,191,36,0.2);  color: #fde68a; }
-
-/* ===== GALLERY ===== */
-.gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.gallery-item { aspect-ratio: 1; border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, #2a1850, #1a1030); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 3rem; transition: transform 0.3s; cursor: pointer; position: relative; }
-.gallery-item:hover { transform: scale(1.04); }
-.gallery-item.large { grid-column: span 2; aspect-ratio: 2/1; font-size: 5rem; }
-.gallery-overlay { position: absolute; inset: 0; background: rgba(255,110,180,0.1); opacity: 0; transition: opacity 0.25s; display: flex; align-items: flex-end; padding: 14px; }
-.gallery-item:hover .gallery-overlay { opacity: 1; }
-.gallery-credit { font-size: 0.78rem; font-weight: 700; color: white; font-family: var(--font-main); }
-.gallery-img { width: 100%; height: 100%; object-fit: cover; }
-
-/* ===== LINKS ===== */
-.links-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.link-card { display: flex; align-items: center; gap: 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; text-decoration: none; color: var(--text); transition: all 0.25s; font-weight: 700; }
-.link-card:hover { transform: translateY(-3px); border-color: var(--primary); background: rgba(255,110,180,0.08); }
-.link-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
-.link-icon.tw { background: #1da1f2; }
-.link-icon.yt { background: #ff0000; }
-.link-icon.tt { background: #010101; border: 1px solid #69c9d0; }
-.link-icon.bo { background: #fc5f92; }
-.link-icon.ni { background: #252525; }
-.link-icon.dc { background: #5865f2; }
-.link-text-main { font-size: 0.92rem; }
-.link-text-sub { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
-
-/* ===== CONTACT ===== */
-.contact-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 36px 28px; text-align: center; backdrop-filter: blur(10px); }
-.contact-box p { color: var(--text-muted); margin-bottom: 24px; font-size: 0.95rem; line-height: 1.8; }
-.contact-methods { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto; }
-.contact-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 28px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 0.95rem; transition: all 0.25s; border: 2px solid var(--border); color: var(--text); background: var(--bg-card); }
-.contact-btn.primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); border-color: transparent; color: white; }
-.contact-btn:hover { transform: translateY(-3px); box-shadow: var(--glow); }
-
-/* ===== FOOTER ===== */
-footer { position: relative; z-index: 1; text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.82rem; border-top: 1px solid var(--border); }
-footer .footer-name { font-family: var(--font-accent); font-size: 1.2rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
-
-/* ===== DECO ===== */
-.deco-circle { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; animation: float 6s ease-in-out infinite; }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 600px) {
-  nav { padding: 10px 14px; }
-  .nav-links a { font-size: 0.7rem; padding: 4px 7px; }
-  .links-grid { grid-template-columns: 1fr; }
-  .hero-avatar { width: 160px; height: 160px; font-size: 64px; }
-  .hero-avatar-wrap { width: 160px; height: 160px; }
-  section { padding: 50px 16px; }
-  .profile-card { padding: 20px; }
-}
-@media (min-width: 600px) {
-  .video-grid { grid-template-columns: repeat(2, 1fr); }
-  .gallery-grid { grid-template-columns: repeat(3, 1fr); }
-  .gallery-item.large { grid-column: span 2; }
-  .contact-methods { flex-direction: row; justify-content: center; }
-}
-
-/* ===== SCROLL REVEAL ===== */
-.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-
-/* ===== SKELETON ===== */
-.skeleton {
-  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 8px;
-}
-@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-</style>
-</head>
-<body>
-
-<!-- ===== SETTINGS: ここを書き換えるだけ ===== -->
-<script>
-// ▼▼▼ Apps ScriptのデプロイURLをここに貼り付けてください ▼▼▼
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxE3cllxOyD7lsqM5T3AtA8E1K6uK9qM2lGMTA9eo43n64GUpCPwBgaN5h50yrbmETj/exec';
-
-// ▼▼▼ お問い合わせ先 ▼▼▼
-const CONTACT = {
-  email: 'your-email@example.com',
-  twitter_url: 'https://x.com/your_account',
-};
-</script>
-
-<!-- Loading -->
-<div id="loading-screen">
-  <div class="loading-spinner"></div>
-  <div class="loading-text">
-    読み込み中
-    <span class="loading-dot">・</span>
-    <span class="loading-dot">・</span>
-    <span class="loading-dot">・</span>
-  </div>
-</div>
-
-<div id="error-banner"></div>
-<div class="stars" id="stars"></div>
-<div class="deco-circle" style="width:300px;height:300px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(255,110,180,0.08),transparent 70%);"></div>
-<div class="deco-circle" style="width:200px;height:200px;bottom:20%;left:-80px;background:radial-gradient(circle,rgba(167,139,250,0.08),transparent 70%);animation-delay:2s;"></div>
-
-<!-- NAVIGATION -->
-<nav>
-  <div class="nav-logo" id="nav-logo">✦ Loading...</div>
-  <ul class="nav-links">
-    <li><a href="#profile">プロフィール</a></li>
-    <li><a href="#stats">実績</a></li>
-    <li><a href="#videos">動画</a></li>
-    <li><a href="#schedule">スケジュール</a></li>
-    <li><a href="#gallery">ギャラリー</a></li>
-    <li><a href="#contact">お問合わせ</a></li>
-  </ul>
-</nav>
-
-<!-- ===== HERO ===== -->
-<section id="hero">
-  <div class="hero-avatar-wrap">
-    <div class="hero-avatar-ring"></div>
-    <div class="hero-avatar" id="hero-avatar">🌟</div>
-  </div>
-  <p class="hero-ruby" id="hero-ruby">Loading...</p>
-  <h1 class="hero-name" id="hero-name">...</h1>
-  <p class="hero-tagline" id="hero-tagline">✨</p>
-  <div class="hero-tags" id="hero-tags"></div>
-  <div class="hero-sns" id="hero-sns"></div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ===== PROFILE ===== -->
-<section id="profile">
-  <div class="section-title reveal">👤 プロフィール<span class="en">PROFILE</span></div>
-  <div class="profile-card reveal" id="profile-content">
-    <div class="skeleton" style="height:40px;margin-bottom:12px;"></div>
-    <div class="skeleton" style="height:40px;margin-bottom:12px;"></div>
-    <div class="skeleton" style="height:60px;"></div>
-  </div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ===== STATS ===== -->
-<section id="stats">
-  <div class="section-title reveal">📊 活動実績<span class="en">ACHIEVEMENTS</span></div>
-  <div class="stats-grid reveal" id="stats-numbers"></div>
-  <div class="collab-list reveal" id="stats-history"></div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ===== VIDEOS ===== -->
-<section id="videos">
-  <div class="section-title reveal">🎬 動画 / 配信<span class="en">VIDEOS</span></div>
-  <div class="video-grid reveal" id="videos-content"></div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ===== SCHEDULE ===== -->
-<section id="schedule">
-  <div class="section-title reveal">📅 配信スケジュール<span class="en">SCHEDULE</span></div>
-  <div class="schedule-list reveal" id="schedule-content"></div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ===== GALLERY ===== -->
-<section id="gallery">
-  <div class="section-title reveal">🎨 ファンアートギャラリー<span class="en">FAN ART GALLERY</span></div>
-  <p style="text-align:center;color:var(--text-muted);font-size:0.85rem;margin-bottom:24px;font-weight:700;" class="reveal" id="gallery-tag"></p>
-  <div class="gallery-grid reveal" id="gallery-content"></div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ===== LINKS ===== -->
-<section id="links">
-  <div class="section-title reveal">🔗 リンク集<span class="en">LINKS</span></div>
-  <div class="links-grid reveal" id="links-content"></div>
-</section>
-
-<div class="section-divider"></div>
-
-<!-- ===== CONTACT ===== -->
-<section id="contact">
-  <div class="section-title reveal">📩 お問い合わせ<span class="en">CONTACT</span></div>
-  <div class="contact-box reveal" id="contact-content">
-    <p>お仕事のご依頼・コラボのご相談はこちらからお気軽にどうぞ！🌟<br>ゲームタイアップ・歌唱依頼・イベント出演・グッズ制作など幅広くご相談受け付けています。<br><br>返信まで数日いただく場合があります。お急ぎの場合はDMもご活用ください💌</p>
-    <div class="contact-methods" id="contact-methods"></div>
-  </div>
-</section>
-
-<!-- ===== FOOTER ===== -->
-<footer>
-  <div class="footer-name" id="footer-name">✦ VTuber ✦</div>
-  <p id="footer-copy">© 2024 VTuber. All Rights Reserved.</p>
-  <p style="margin-top:6px;font-size:0.75rem;" id="footer-tags"></p>
-</footer>
-
-<script>
-// ================================================================
-// DATA RENDERING FUNCTIONS
-// ================================================================
-
-function renderProfile(p) {
-  const name = p['名前'] || '';
-  const reading = name.match(/（(.+)）/)?.[1] || '';
-
-  // Nav & footer
-  document.getElementById('nav-logo').textContent = '✦ ' + (name.replace(/（.+）/,'') || 'VTuber');
-  document.getElementById('footer-name').textContent = '✦ ' + name + ' ✦';
-  document.getElementById('footer-copy').textContent = `© ${new Date().getFullYear()} ${name.replace(/（.+）/,'')}. All Rights Reserved.`;
-  document.title = (name.replace(/（.+）/,'') || 'VTuber') + ' - プロフィール';
-
-  // Hero
-  document.getElementById('hero-ruby').textContent = reading ? reading.split('').join('') : '';
-  document.getElementById('hero-name').textContent = name.replace(/（.+）/,'');
-  document.getElementById('hero-tagline').textContent = p['キャッチコピー'] || '';
-
-  // Tags from 得意ジャンル
-  const tagsEl = document.getElementById('hero-tags');
-  const genreIcons = { 'アニソン':'🎵','ホラーゲーム':'🎮','ASMR':'🌙','乙女ゲー':'💜','猫好き':'🐱' };
-  const tagClasses = ['','purple','yellow','','purple'];
-  const genres = (p['得意ジャンル'] || '').split(',').map(s => s.trim()).filter(Boolean);
-  genres.forEach((g, i) => {
-    const span = document.createElement('span');
-    span.className = 'tag ' + (tagClasses[i % tagClasses.length]);
-    span.textContent = (genreIcons[g] || '✦') + ' ' + g;
-    tagsEl.appendChild(span);
-  });
-
-  // Profile card
-  const rows = [
-    { label:'名前',         value: name },
-    { label:'活動開始',     value: p['活動開始'] || '' },
-    { label:'活動内容',     value: p['活動内容'] || '' },
-    { label:'得意ジャンル', genres: genres },
-    { label:'自己紹介',     value: p['自己紹介'] || '' },
-    { label:'ファンネーム', value: '⭐ ' + (p['ファンネーム'] || '') },
-    { label:'ハッシュタグ', value: (p['配信タグ'] || '') + ' ／ ' + (p['ファンアートタグ'] || ''), pink: true },
-  ];
-
-  document.getElementById('profile-content').innerHTML = rows.map(r => `
-    <div class="profile-info-row">
-      <span class="info-label">${r.label}</span>
-      <span class="info-value" ${r.pink ? 'style="color:var(--primary)"' : ''}>
-        ${r.genres
-          ? r.genres.map(g => `<span class="tag" style="font-size:0.78rem">${(genreIcons[g]||'✦')} ${g}</span>`).join('')
-          : escHtml(r.value)}
-        ${r.genres ? '' : ''}
-      </span>
-    </div>
-  `).join('');
-
-  // Gallery tag
-  const fanTag = p['ファンアートタグ'] || '';
-  document.getElementById('gallery-tag').innerHTML =
-    `ファンアートのタグ → <span style="color:var(--primary)">${escHtml(fanTag)}</span> 💕`;
-
-  // Footer tags
-  document.getElementById('footer-tags').innerHTML =
-    `二次創作ガイドライン ／ ファンアートタグ: <span style="color:var(--primary)">${escHtml(fanTag)}</span>`;
-
-  // SNS links (from links sheet - rendered later, but add basic hero buttons now)
-}
-
-function renderHeroSNS(links) {
-  const snsEl = document.getElementById('hero-sns');
-  snsEl.innerHTML = '';
-  const snsMap = {
-    'tw': { cls: 'twitter', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.18 2.25h6.038l4.26 5.638 5.766-5.638zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>` },
-    'yt': { cls: 'youtube', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>` },
-    'tt': { cls: 'tiktok', icon: '🎵' },
-  };
-  ['tw','yt','tt'].forEach(kind => {
-    const link = links.find(l => l['アイコン種別'] === kind);
-    if (!link || !link['URL'] || link['URL'] === '#') return;
-    const btn = document.createElement('a');
-    btn.href = link['URL'];
-    btn.className = 'sns-btn ' + (snsMap[kind]?.cls || '');
-    btn.target = '_blank';
-    btn.rel = 'noopener';
-    btn.innerHTML = (snsMap[kind]?.icon || '') + ' ' + link['サービス名'];
-    snsEl.appendChild(btn);
-  });
-}
-
-function renderStats(stats) {
-  // Numbers
-  document.getElementById('stats-numbers').innerHTML = stats.numbers.map(r => `
-    <div class="stat-card">
-      <div class="stat-num">${escHtml(String(r['数値']))}</div>
-      <div class="stat-label">${escHtml(r['ラベル'])}</div>
-    </div>
-  `).join('');
-
-  // History
-  document.getElementById('stats-history').innerHTML = stats.history.map(r => `
-    <div class="collab-item">
-      <span class="collab-badge ${escHtml(r['種別'])}">${escHtml(r['種別'])}</span>
-      <span>${escHtml(r['ラベル'])}</span>
-    </div>
-  `).join('');
-}
-
-function renderVideos(videos) {
-  document.getElementById('videos-content').innerHTML = videos.map(v => `
-    <div class="video-card">
-      <div class="video-embed">
-        <iframe src="https://www.youtube.com/embed/${escHtml(v['YouTube動画ID'])}"
-          allowfullscreen loading="lazy" title="${escHtml(v['タイトル'])}"></iframe>
-      </div>
-      <div class="video-info">
-        <div class="video-title">${escHtml(v['タイトル'])}</div>
-        <div class="video-meta">${escHtml(v['日付'])} ／ 再生数 ${escHtml(v['再生数'])}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderSchedule(schedule) {
-  if (!schedule.length) {
-    document.getElementById('schedule-content').innerHTML =
-      '<p style="text-align:center;color:var(--text-muted);padding:24px;">現在スケジュールはありません</p>';
-    return;
-  }
-  document.getElementById('schedule-content').innerHTML = schedule.map(r => `
-    <div class="schedule-item">
-      <div class="schedule-date">
-        <div class="schedule-month">${escHtml(r['月'])}</div>
-        <div class="schedule-day">${escHtml(r['日'])}</div>
-      </div>
-      <div class="schedule-divider"></div>
-      <div class="schedule-content-inner" style="flex:1">
-        <div class="schedule-title-text">${escHtml(r['タイトル'])}</div>
-        <div class="schedule-time">${escHtml(r['時間'])} / YouTube Live</div>
-      </div>
-      <span class="schedule-type ${escHtml(r['種別'])}">${escHtml(r['種別'])}</span>
-    </div>
-  `).join('');
-}
-
-function renderGallery(gallery) {
-  const bgColors = [
-    'linear-gradient(135deg,#2a1850,#3d1f6e)',
-    'linear-gradient(135deg,#1a2a50,#1f3a6e)',
-    'linear-gradient(135deg,#50182a,#6e1f3d)',
-    'linear-gradient(135deg,#181a50,#2a1f6e)',
-    'linear-gradient(135deg,#1a3a2a,#1f6e4a)',
-    'linear-gradient(135deg,#3a1a50,#5a1f6e)',
-  ];
-  document.getElementById('gallery-content').innerHTML = gallery.map((g, i) => {
-    const isLarge = g['サイズ（large/normal）'] === 'large';
-    const hasImg = g['画像URL'] && g['画像URL'].trim();
-    return `
-      <div class="gallery-item${isLarge ? ' large' : ''}" style="background:${bgColors[i % bgColors.length]}">
-        ${hasImg
-          ? `<img class="gallery-img" src="${escHtml(g['画像URL'])}" alt="ファンアート by ${escHtml(g['作者名'])}" loading="lazy">`
-          : `<span>${escHtml(g['絵文字'])}</span>`
-        }
-        <div class="gallery-overlay">
-          <span class="gallery-credit">🎨 Illust by ${escHtml(g['作者名'])}</span>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function renderLinks(links) {
-  const iconSVG = {
-    tw: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.18 2.25h6.038l4.26 5.638 5.766-5.638zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
-    yt: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
-    tt: '🎵', bo: '🛍', ni: '▶', dc: '💬',
-  };
-  document.getElementById('links-content').innerHTML = links.map(l => `
-    <a href="${escHtml(l['URL'])}" class="link-card" target="_blank" rel="noopener">
-      <div class="link-icon ${escHtml(l['アイコン種別'])}">${iconSVG[l['アイコン種別']] || '🔗'}</div>
-      <div>
-        <div class="link-text-main">${escHtml(l['サービス名'])}</div>
-        <div class="link-text-sub">${escHtml(l['サブテキスト'])}</div>
-      </div>
-    </a>
-  `).join('');
-}
-
-function renderContact() {
-  document.getElementById('contact-methods').innerHTML = `
-    <a href="mailto:${CONTACT.email}" class="contact-btn primary">📧 メールで問い合わせ</a>
-    <a href="${CONTACT.twitter_url}" class="contact-btn" target="_blank" rel="noopener">🐦 X のDMはこちら</a>
-  `;
-}
-
-// ================================================================
-// MAIN: FETCH & RENDER
-// ================================================================
-async function loadData() {
-  // API URLが設定されていない場合はデモデータを使う
-  if (!SHEET_API_URL || SHEET_API_URL === 'https://script.google.com/macros/s/AKfycbxE3cllxOyD7lsqM5T3AtA8E1K6uK9qM2lGMTA9eo43n64GUpCPwBgaN5h50yrbmETj/exec') {
-    console.warn('SHEET_API_URL が設定されていません。デモデータを表示します。');
-    renderWithDemoData();
-    hideLoading();
-    return;
-  }
-
-  try {
-    const res = await fetch(SHEET_API_URL + '?section=all');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-
-    renderProfile(data.profile || {});
-    renderStats(data.stats || { numbers: [], history: [] });
-    renderVideos(data.videos || []);
-    renderSchedule(data.schedule || []);
-    renderGallery(data.gallery || []);
-    renderLinks(data.links || []);
-    renderHeroSNS(data.links || []);
-    renderContact();
-
-  } catch(err) {
-    showError('データの読み込みに失敗しました: ' + err.message);
-    renderWithDemoData();
-  } finally {
-    hideLoading();
-  }
-}
-
-function renderWithDemoData() {
-  // フォールバック用デモデータ
-  renderProfile({
-    '名前': '星野ひかり（ほしのひかり）',
-    '活動開始': '2022年4月 ✦ 個人勢VTuber',
-    '活動内容': '歌ってみた・ゲーム実況・雑談配信・ASMRなど',
-    '得意ジャンル': 'アニソン,ホラーゲーム,ASMR,乙女ゲー,猫好き',
-    '自己紹介': '星の海から降りてきた、ふわふわ系VTuberです✨ 歌とゲームと雑談が大好き！',
-    'ファンネーム': 'ひかりん',
-    '配信タグ': '#星野ひかり配信',
-    'ファンアートタグ': '#星野ひかりファンアート',
-    'キャッチコピー': '✨ 星空からやってきた、歌うバーチャルアイドル ✨',
-  });
-  renderStats({
-    numbers: [
-      { 'ラベル': 'YouTube 登録者', '数値': '42K+' },
-      { 'ラベル': 'X フォロワー', '数値': '28K+' },
-      { 'ラベル': '総配信回数', '数値': '300+' },
-      { 'ラベル': '歌ってみた投稿数', '数値': '150+' },
-    ],
-    history: [
-      { '種別': 'コラボ',   'ラベル': '〇〇VTuber様 × 2023年6月 / ゲーム配信コラボ' },
-      { '種別': 'イベント', 'ラベル': 'VTuber歌フェス2023 出演 / 歌唱パート担当' },
-      { '種別': '受賞',     'ラベル': '△△コンテスト 歌ってみた部門 優秀賞 / 2024年1月' },
-      { '種別': 'コラボ',   'ラベル': '□□ゲームメーカー様 タイアップ配信 / 2024年3月' },
-    ],
-  });
-  renderVideos([
-    { 'タイトル': '🎵 おすすめの歌ってみた', 'YouTube動画ID': 'dQw4w9WgXcQ', '日付': '2024年3月', '再生数': '12万回' },
-    { 'タイトル': '🎮 ホラーゲーム実況',     'YouTube動画ID': 'dQw4w9WgXcQ', '日付': '2024年2月', '再生数': '8万回' },
-    { 'タイトル': '✨ 誕生日記念配信',        'YouTube動画ID': 'dQw4w9WgXcQ', '日付': '2024年1月', '再生数': '25万回' },
-    { 'タイトル': '🌙 深夜ASMR配信',         'YouTube動画ID': 'dQw4w9WgXcQ', '日付': '2024年2月', '再生数': '6万回' },
-  ]);
-  renderSchedule([
-    { '月': '4月', '日': '01', 'タイトル': '🎮 ホラーゲーム実況「〇〇」初見プレイ', '時間': '22:00〜', '種別': 'LIVE' },
-    { '月': '4月', '日': '03', 'タイトル': '🎵 歌枠 ＋ △△VTuber様とのコラボ配信', '時間': '21:00〜', '種別': 'コラボ' },
-    { '月': '4月', '日': '05', 'タイトル': '💬 雑談配信 ＋ Q&Aコーナー',             '時間': '22:00〜', '種別': 'LIVE' },
-    { '月': '4月', '日': '10', 'タイトル': '✨ VTuberフェス2024 出演',                '時間': '14:00〜', '種別': 'イベント' },
-  ]);
-  renderGallery([
-    { '絵文字': '🌟', '作者名': '○○さん', 'サイズ（large/normal）': 'large', '画像URL': '' },
-    { '絵文字': '✨', '作者名': '△△さん', 'サイズ（large/normal）': 'normal', '画像URL': '' },
-    { '絵文字': '🌸', '作者名': '□□さん', 'サイズ（large/normal）': 'normal', '画像URL': '' },
-    { '絵文字': '🎵', '作者名': '◇◇さん', 'サイズ（large/normal）': 'normal', '画像URL': '' },
-    { '絵文字': '🐱', '作者名': '××さん', 'サイズ（large/normal）': 'normal', '画像URL': '' },
-  ]);
-  renderLinks([
-    { 'サービス名': 'X / Twitter', 'URL': '#', 'サブテキスト': '@hoshinohikari_v', 'アイコン種別': 'tw' },
-    { 'サービス名': 'YouTube',     'URL': '#', 'サブテキスト': '星野ひかりch.',    'アイコン種別': 'yt' },
-    { 'サービス名': 'TikTok',      'URL': '#', 'サブテキスト': '@hoshinohikari',   'アイコン種別': 'tt' },
-    { 'サービス名': 'BOOTH',       'URL': '#', 'サブテキスト': 'グッズ・ボイス販売','アイコン種別': 'bo' },
-    { 'サービス名': 'ニコニコ動画', 'URL': '#', 'サブテキスト': '歌ってみたアーカイブ','アイコン種別': 'ni' },
-    { 'サービス名': 'Discord',     'URL': '#', 'サブテキスト': 'ファンサーバー',    'アイコン種別': 'dc' },
-  ]);
-  renderContact();
-}
-
-function hideLoading() {
-  document.getElementById('loading-screen').classList.add('hidden');
-}
-
-function showError(msg) {
-  const el = document.getElementById('error-banner');
-  el.textContent = '⚠ ' + msg;
-  el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 6000);
-}
-
-function escHtml(str) {
-  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ================================================================
-// STARS & SCROLL REVEAL
-// ================================================================
-const starsEl = document.getElementById('stars');
-for (let i = 0; i < 120; i++) {
-  const s = document.createElement('div');
-  s.className = 'star';
-  const size = Math.random() * 2.5 + 0.5;
-  s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${size}px;height:${size}px;--dur:${2+Math.random()*4}s;--delay:${Math.random()*5}s;opacity:${Math.random()*0.6+0.2};`;
-  starsEl.appendChild(s);
-}
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
-  navLinks.forEach(a => {
-    const active = a.getAttribute('href') === '#' + current;
-    a.style.color = active ? 'var(--primary)' : '';
-    a.style.background = active ? 'rgba(255,110,180,0.12)' : '';
-  });
-});
-
-// START
-loadData();
-</script>
-</body>
-</html>
+
+読み込み中 ・ ・ ・
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+✦ 祐太
+		プロフィール
+		実績
+		動画
+		スケジュール
+		ギャラリー
+		お問合わせ
+
+🌟
+ゆうた
+祐太
+✨ 星空からやってきた、歌うバーチャルアイドル ✨
+🎮 ホラーゲーム
+🌙 ASMR
+💜 乙女ゲー
+🐱 猫好き
+
+X / Twitter
+
+YouTube🎵 TikTok
+
+👤 プロフィール
+PROFILE
+名前
+祐太（ゆうた）
+活動開始
+2022年4月 ✦ 個人勢VTuber
+活動内容
+歌ってみた・ゲーム実況・雑談配信・ASMRなど
+得意ジャンル
+🎮 ホラーゲーム🌙 ASMR💜 乙女ゲー🐱 猫好き
+自己紹介
+星の海から降りてきた、ふわふわ系VTuberです✨
+ファンネーム
+⭐ ひかりん
+ハッシュタグ
+#星野ひかり配信 ／ #星野ひかりファンアート
+
+📊 活動実績
+ACHIEVEMENTS
+100
+YouTube 登録者
+28K+
+X フォロワー
+300+
+総配信回数
+150+
+歌ってみた投稿数
+コラボ
+〇〇VTuber様 × 2023年6月 / ゲーム配信コラボ
+イベント
+VTuber歌フェス2023 出演 / 歌唱パート担当
+受賞
+△△コンテスト 歌ってみた部門 優秀賞 / 2024年1月
+コラボ
+□□ゲームメーカー様 タイアップ配信 / 2024年3月
+
+🎬 動画 / 配信
+VIDEOS
+
+🎵 おすすめの歌ってみた
+2024-02-29T15:00:00.000Z ／ 再生数 12万回
+
+🎮 ホラーゲーム実況 初見
+2024-01-31T15:00:00.000Z ／ 再生数 8万回
+
+✨ 誕生日記念配信
+2023-12-31T15:00:00.000Z ／ 再生数 25万回
+
+🌙 深夜ASMR配信
+2024-01-31T15:00:00.000Z ／ 再生数 6万回
+
+📅 配信スケジュール
+SCHEDULE
+4月
+1
+
+🎮 ホラーゲーム実況「〇〇」初見プレイ
+22:00〜 / YouTube Live
+LIVE
+4月
+3
+
+🎵 歌枠 ＋ △△VTuber様とのコラボ配信
+21:00〜 / YouTube Live
+コラボ
+4月
+5
+
+💬 雑談配信 ＋ Q&Aコーナー
+22:00〜 / YouTube Live
+LIVE
+4月
+10
+
+✨ VTuberフェス2024 出演
+14:00〜 / YouTube Live
+イベント
+4月
+15
+
+🌙 深夜ASMR配信
+24:00〜 / YouTube Live
+LIVE
+
+🎨 ファンアートギャラリー
+FAN ART GALLERY
+ファンアートのタグ → #星野ひかりファンアート 💕
+🌟
+🎨 Illust by ○○さん
+✨
+🎨 Illust by △△さん
+🌸
+🎨 Illust by □□さん
+🎵
+🎨 Illust by ◇◇さん
+🐱
+🎨 Illust by ××さん
+
+🔗 リンク集
+LINKS
+
+X / Twitter
+@hoshinohikari_v
+
+YouTube
+星野ひかりch.
+🎵
+TikTok
+@hoshinohikari
+🛍
+BOOTH
+グッズ・ボイス販売
+▶
+ニコニコ動画
+歌ってみたアーカイブ
+💬
+Discord
+ファンサーバー
+
+📩 お問い合わせ
+CONTACT
+お仕事のご依頼・コラボのご相談はこちらからお気軽にどうぞ！🌟 ゲームタイアップ・歌唱依頼・イベント出演・グッズ制作など幅広くご相談受け付けています。  返信まで数日いただく場合があります。お急ぎの場合はDMもご活用ください💌
+📧 メールで問い合わせ 🐦 X のDMはこちら
+✦ 祐太（ゆうた） ✦
+© 2026 祐太. All Rights Reserved.
+二次創作ガイドライン ／ ファンアートタグ: #星野ひかりファンアート
