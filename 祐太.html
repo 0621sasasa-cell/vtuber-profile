@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)file:///Users/yutasasakura/Downloads/index_1.html -->
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>祐太 - プロフィール</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./祐太_files/css2" rel="stylesheet">
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --primary: #ff6eb4;
+  --primary-light: #ffb3d9;
+  --secondary: #a78bfa;
+  --accent: #fbbf24;
+  --accent2: #34d399;
+  --bg-dark: #0d0a1a;
+  --bg-mid: #1a1030;
+  --bg-card: rgba(255,255,255,0.06);
+  --text: #fdf4ff;
+  --text-muted: #c4b5d8;
+  --border: rgba(255,110,180,0.25);
+  --glow: 0 0 30px rgba(255,110,180,0.4);
+  --font-main: 'M PLUS Rounded 1c', sans-serif;
+  --font-accent: 'Zen Maru Gothic', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-main);
+  background: var(--bg-dark);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(167,139,250,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(255,110,180,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(26,16,48,0.8) 0%, #0d0a1a 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+
+/* ===== LOADING ===== */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#loading-screen.hidden { opacity: 0; visibility: hidden; }
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,110,180,0.2);
+  border-top-color: var(--primary);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text {
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  color: var(--primary-light);
+  font-weight: 700;
+}
+.loading-dot {
+  display: inline-block;
+  animation: loadDot 1.4s ease-in-out infinite;
+}
+.loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes loadDot { 0%,80%,100%{opacity:0.2;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
+
+/* ===== ERROR BANNER ===== */
+#error-banner {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.4);
+  color: #fca5a5;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  backdrop-filter: blur(10px);
+  max-width: 90vw;
+  text-align: center;
+}
+
+/* ===== NAVIGATION ===== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 14px 20px;
+  background: rgba(13,10,26,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-logo {
+  font-family: var(--font-accent);
+  font-weight: 900;
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-links { display: flex; gap: 6px; list-style: none; flex-wrap: wrap; justify-content: flex-end; }
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.78rem;
+  padding: 5px 10px;
+  border-radius: 20px;
+  transition: all 0.25s;
+  font-weight: 700;
+}
+.nav-links a:hover { color: var(--primary); background: rgba(255,110,180,0.12); }
+
+/* ===== HERO ===== */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 60px;
+  text-align: center;
+  z-index: 1;
+}
+.hero-avatar-wrap { position: relative; width: 200px; height: 200px; margin: 0 auto 28px; }
+.hero-avatar-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(var(--primary), var(--secondary), var(--accent), var(--primary));
+  animation: ringSpinAnim 4s linear infinite;
+}
+@keyframes ringSpinAnim { to { transform: rotate(360deg); } }
+.hero-avatar-ring::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--bg-dark);
+}
+.hero-avatar {
+  position: relative;
+  z-index: 2;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2a1850, #1a1030);
+  border: 3px solid rgba(255,110,180,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  overflow: hidden;
+  box-shadow: var(--glow);
+}
+.hero-name {
+  font-family: var(--font-accent);
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, #ff9de2, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-ruby { font-size: clamp(0.9rem, 3vw, 1.2rem); color: var(--text-muted); letter-spacing: 0.3em; margin-bottom: 6px; animation: fadeUp 0.8s 0.1s ease both; }
+.hero-tagline { font-size: clamp(0.95rem, 3.5vw, 1.25rem); color: var(--primary-light); margin: 12px 0 24px; font-weight: 700; animation: fadeUp 0.8s 0.2s ease both; }
+.hero-tags { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 28px; animation: fadeUp 0.8s 0.3s ease both; }
+.tag { background: rgba(255,110,180,0.15); border: 1px solid var(--border); color: var(--primary-light); padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+.tag.purple { background: rgba(167,139,250,0.15); border-color: rgba(167,139,250,0.3); color: #c4b5fa; }
+.tag.yellow { background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.3); color: #fde68a; }
+.hero-sns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.8s 0.4s ease both; }
+.sns-btn { display: flex; align-items: center; gap: 7px; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 0.88rem; transition: all 0.25s; border: 2px solid transparent; }
+.sns-btn.twitter { background: #1da1f2; color: white; }
+.sns-btn.youtube { background: #ff0000; color: white; }
+.sns-btn.tiktok  { background: #010101; color: white; border-color: #69c9d0; }
+.sns-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== SECTIONS ===== */
+section { position: relative; z-index: 1; padding: 70px 20px; max-width: 900px; margin: 0 auto; }
+.section-title {
+  font-family: var(--font-accent);
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 40px;
+}
+.section-title .en { display: block; font-size: 0.45em; letter-spacing: 0.2em; color: var(--primary); font-family: var(--font-main); font-weight: 700; margin-top: 4px; text-align: center; }
+.section-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 auto; max-width: 900px; }
+
+/* ===== PROFILE ===== */
+.profile-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 32px; backdrop-filter: blur(10px); }
+.profile-info-row { display: flex; gap: 12px; align-items: flex-start; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.profile-info-row:last-child { border-bottom: none; padding-bottom: 0; }
+.info-label { min-width: 90px; font-size: 0.78rem; font-weight: 800; color: var(--primary); background: rgba(255,110,180,0.12); padding: 3px 10px; border-radius: 10px; text-align: center; white-space: nowrap; margin-top: 2px; }
+.info-value { color: var(--text); font-size: 0.95rem; }
+.genre-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ===== STATS ===== */
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 30px; }
+.stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 20px 16px; text-align: center; transition: transform 0.25s; }
+.stat-card:hover { transform: translateY(-4px); }
+.stat-num { font-family: var(--font-accent); font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 700; margin-top: 4px; }
+.collab-list { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+.collab-item { padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 12px; font-size: 0.9rem; }
+.collab-item:last-child { border-bottom: none; }
+.collab-badge { font-size: 0.72rem; font-weight: 800; padding: 2px 10px; border-radius: 10px; white-space: nowrap; }
+.collab-badge.コラボ  { background: rgba(167,139,250,0.2); color: #c4b5fa; }
+.collab-badge.イベント{ background: rgba(251,191,36,0.2);  color: #fde68a; }
+.collab-badge.受賞    { background: rgba(52,211,153,0.2);  color: #6ee7b7; }
+
+/* ===== VIDEOS ===== */
+.video-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+.video-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; transition: transform 0.25s; }
+.video-card:hover { transform: translateY(-4px); }
+.video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+.video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.video-info { padding: 14px 16px; }
+.video-title { font-weight: 800; font-size: 0.95rem; margin-bottom: 4px; }
+.video-meta { font-size: 0.78rem; color: var(--text-muted); }
+
+/* ===== SCHEDULE ===== */
+.schedule-list { display: flex; flex-direction: column; gap: 12px; }
+.schedule-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px; display: flex; gap: 16px; align-items: center; transition: all 0.25s; }
+.schedule-item:hover { border-color: var(--primary); background: rgba(255,110,180,0.06); }
+.schedule-date { text-align: center; min-width: 52px; }
+.schedule-month { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; }
+.schedule-day { font-family: var(--font-accent); font-size: 1.8rem; font-weight: 900; color: var(--primary); line-height: 1; }
+.schedule-divider { width: 1px; background: var(--border); height: 40px; }
+.schedule-content { flex: 1; }
+.schedule-title-text { font-weight: 800; font-size: 0.95rem; }
+.schedule-time { font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; }
+.schedule-type { font-size: 0.72rem; font-weight: 800; padding: 2px 10px; border-radius: 10px; white-space: nowrap; align-self: flex-start; margin-top: 2px; }
+.schedule-type.LIVE    { background: rgba(255,110,180,0.2); color: var(--primary-light); }
+.schedule-type.コラボ  { background: rgba(167,139,250,0.2); color: #c4b5fa; }
+.schedule-type.イベント{ background: rgba(251,191,36,0.2);  color: #fde68a; }
+
+/* ===== GALLERY ===== */
+.gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.gallery-item { aspect-ratio: 1; border-radius: 16px; overflow: hidden; background: linear-gradient(135deg, #2a1850, #1a1030); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 3rem; transition: transform 0.3s; cursor: pointer; position: relative; }
+.gallery-item:hover { transform: scale(1.04); }
+.gallery-item.large { grid-column: span 2; aspect-ratio: 2/1; font-size: 5rem; }
+.gallery-overlay { position: absolute; inset: 0; background: rgba(255,110,180,0.1); opacity: 0; transition: opacity 0.25s; display: flex; align-items: flex-end; padding: 14px; }
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-credit { font-size: 0.78rem; font-weight: 700; color: white; font-family: var(--font-main); }
+.gallery-img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ===== LINKS ===== */
+.links-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.link-card { display: flex; align-items: center; gap: 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; text-decoration: none; color: var(--text); transition: all 0.25s; font-weight: 700; }
+.link-card:hover { transform: translateY(-3px); border-color: var(--primary); background: rgba(255,110,180,0.08); }
+.link-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+.link-icon.tw { background: #1da1f2; }
+.link-icon.yt { background: #ff0000; }
+.link-icon.tt { background: #010101; border: 1px solid #69c9d0; }
+.link-icon.bo { background: #fc5f92; }
+.link-icon.ni { background: #252525; }
+.link-icon.dc { background: #5865f2; }
+.link-text-main { font-size: 0.92rem; }
+.link-text-sub { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+
+/* ===== CONTACT ===== */
+.contact-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 36px 28px; text-align: center; backdrop-filter: blur(10px); }
+.contact-box p { color: var(--text-muted); margin-bottom: 24px; font-size: 0.95rem; line-height: 1.8; }
+.contact-methods { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto; }
+.contact-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 28px; border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 0.95rem; transition: all 0.25s; border: 2px solid var(--border); color: var(--text); background: var(--bg-card); }
+.contact-btn.primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); border-color: transparent; color: white; }
+.contact-btn:hover { transform: translateY(-3px); box-shadow: var(--glow); }
+
+/* ===== FOOTER ===== */
+footer { position: relative; z-index: 1; text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.82rem; border-top: 1px solid var(--border); }
+footer .footer-name { font-family: var(--font-accent); font-size: 1.2rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+
+/* ===== DECO ===== */
+.deco-circle { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; animation: float 6s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  nav { padding: 10px 14px; }
+  .nav-links a { font-size: 0.7rem; padding: 4px 7px; }
+  .links-grid { grid-template-columns: 1fr; }
+  .hero-avatar { width: 160px; height: 160px; font-size: 64px; }
+  .hero-avatar-wrap { width: 160px; height: 160px; }
+  section { padding: 50px 16px; }
+  .profile-card { padding: 20px; }
+}
+@media (min-width: 600px) {
+  .video-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+  .gallery-item.large { grid-column: span 2; }
+  .contact-methods { flex-direction: row; justify-content: center; }
+}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== SKELETON ===== */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+</style>
+</head>
+<body>
+
+<!-- ===== SETTINGS: ここを書き換えるだけ ===== -->
+<script>
+// ▼▼▼ Apps ScriptのデプロイURLをここに貼り付けてください ▼▼▼
+const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxE3cllxOyD7lsqM5T3AtA8E1K6uK9qM2lGMTA9eo43n64GUpCPwBgaN5h50yrbmETj/exec';
+
+// ▼▼▼ お問い合わせ先 ▼▼▼
+const CONTACT = {
+  email: 'your-email@example.com',
+  twitter_url: 'https://x.com/your_account',
+};
+</script>
+
+<!-- Loading -->
+<div id="loading-screen" class="hidden">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">
+    読み込み中
+    <span class="loading-dot">・</span>
+    <span class="loading-dot">・</span>
+    <span class="loading-dot">・</span>
+  </div>
+</div>
+
+<div id="error-banner"></div>
+<div class="stars" id="stars"><div class="star" style="left: 39.709%; top: 7.49429%; width: 2.64244px; height: 2.64244px; --dur: 4.355387628473423s; --delay: 0.5444136967537816s; opacity: 0.622224;"></div><div class="star" style="left: 54.437%; top: 28.7439%; width: 1.45769px; height: 1.45769px; --dur: 4.138283390723077s; --delay: 0.2950822150879445s; opacity: 0.756299;"></div><div class="star" style="left: 17.7993%; top: 93.9542%; width: 0.98726px; height: 0.98726px; --dur: 2.363222021917781s; --delay: 3.355976521068877s; opacity: 0.414896;"></div><div class="star" style="left: 85.5661%; top: 64.9829%; width: 1.98991px; height: 1.98991px; --dur: 4.65086595143921s; --delay: 2.508303261276291s; opacity: 0.253783;"></div><div class="star" style="left: 90.876%; top: 91.3045%; width: 1.17673px; height: 1.17673px; --dur: 2.9064642099742524s; --delay: 1.8736020017519266s; opacity: 0.339018;"></div><div class="star" style="left: 19.4405%; top: 73.3192%; width: 2.77097px; height: 2.77097px; --dur: 5.501218993953806s; --delay: 0.932756337283005s; opacity: 0.343896;"></div><div class="star" style="left: 84.0722%; top: 74.1839%; width: 1.45156px; height: 1.45156px; --dur: 5.83467704008079s; --delay: 1.2390759399806128s; opacity: 0.565321;"></div><div class="star" style="left: 96.825%; top: 87.41%; width: 2.71914px; height: 2.71914px; --dur: 4.1683066540838905s; --delay: 0.10904211687022825s; opacity: 0.352776;"></div><div class="star" style="left: 38.8242%; top: 85.9973%; width: 1.32698px; height: 1.32698px; --dur: 4.208856199121237s; --delay: 0.3066929401495444s; opacity: 0.499419;"></div><div class="star" style="left: 64.9455%; top: 97.5128%; width: 0.655517px; height: 0.655517px; --dur: 4.278765108842418s; --delay: 0.598423161635317s; opacity: 0.37034;"></div><div class="star" style="left: 32.0739%; top: 83.4279%; width: 1.34917px; height: 1.34917px; --dur: 3.737656549996049s; --delay: 0.5770110772681614s; opacity: 0.458927;"></div><div class="star" style="left: 27.687%; top: 9.4577%; width: 1.0684px; height: 1.0684px; --dur: 3.3594422523746506s; --delay: 0.21293596788332037s; opacity: 0.53054;"></div><div class="star" style="left: 18.0198%; top: 47.0661%; width: 2.93238px; height: 2.93238px; --dur: 4.394978909019962s; --delay: 0.5400425070218356s; opacity: 0.717362;"></div><div class="star" style="left: 47.7495%; top: 80.6663%; width: 1.57127px; height: 1.57127px; --dur: 2.3483479674281695s; --delay: 4.944254844295658s; opacity: 0.755366;"></div><div class="star" style="left: 62.0358%; top: 45.2185%; width: 2.87415px; height: 2.87415px; --dur: 5.174097609076964s; --delay: 4.288101427768288s; opacity: 0.795041;"></div><div class="star" style="left: 18.0541%; top: 36.9296%; width: 1.43764px; height: 1.43764px; --dur: 5.065381386454202s; --delay: 4.851037494325429s; opacity: 0.620018;"></div><div class="star" style="left: 95.8611%; top: 76.8967%; width: 1.22063px; height: 1.22063px; --dur: 2.972604780484747s; --delay: 3.533712807195821s; opacity: 0.373844;"></div><div class="star" style="left: 27.8619%; top: 67.27%; width: 1.22897px; height: 1.22897px; --dur: 5.283777343666433s; --delay: 2.7758788690034173s; opacity: 0.710485;"></div><div class="star" style="left: 97.47%; top: 66.3624%; width: 1.41537px; height: 1.41537px; --dur: 2.7494080058587547s; --delay: 2.077485277070758s; opacity: 0.62167;"></div><div class="star" style="left: 25.1512%; top: 48.775%; width: 1.99284px; height: 1.99284px; --dur: 5.081752288193746s; --delay: 4.165376677723693s; opacity: 0.256529;"></div><div class="star" style="left: 2.57533%; top: 86.5041%; width: 2.09269px; height: 2.09269px; --dur: 3.1659210053804663s; --delay: 0.6971607831355925s; opacity: 0.502393;"></div><div class="star" style="left: 42.329%; top: 18.9233%; width: 1.83518px; height: 1.83518px; --dur: 4.994855829060734s; --delay: 4.143678760033043s; opacity: 0.267115;"></div><div class="star" style="left: 42.5547%; top: 28.181%; width: 1.27772px; height: 1.27772px; --dur: 2.729044456941289s; --delay: 3.0715751550412476s; opacity: 0.332852;"></div><div class="star" style="left: 76.0606%; top: 15.3017%; width: 1.14055px; height: 1.14055px; --dur: 4.412311315479485s; --delay: 1.2286374058107508s; opacity: 0.335669;"></div><div class="star" style="left: 62.9417%; top: 13.6646%; width: 1.07556px; height: 1.07556px; --dur: 3.683870747907349s; --delay: 4.578844093050853s; opacity: 0.221833;"></div><div class="star" style="left: 90.8791%; top: 56.6677%; width: 0.838128px; height: 0.838128px; --dur: 5.040576806636088s; --delay: 3.4312969356650953s; opacity: 0.229405;"></div><div class="star" style="left: 3.14255%; top: 3.62085%; width: 1.93349px; height: 1.93349px; --dur: 2.184920330726775s; --delay: 0.8362949831662603s; opacity: 0.439861;"></div><div class="star" style="left: 83.099%; top: 9.98352%; width: 2.09528px; height: 2.09528px; --dur: 5.017138980661129s; --delay: 4.20072141923685s; opacity: 0.285524;"></div><div class="star" style="left: 17.7837%; top: 72.158%; width: 0.759285px; height: 0.759285px; --dur: 2.1483948756996565s; --delay: 1.1467811731698352s; opacity: 0.531615;"></div><div class="star" style="left: 38.6253%; top: 68.0264%; width: 2.05081px; height: 2.05081px; --dur: 2.9897441632575665s; --delay: 1.7027406542578116s; opacity: 0.38138;"></div><div class="star" style="left: 0.0857332%; top: 24.4862%; width: 2.0616px; height: 2.0616px; --dur: 3.6792823484733796s; --delay: 2.687778985814071s; opacity: 0.461434;"></div><div class="star" style="left: 96.0485%; top: 57.1668%; width: 1.56175px; height: 1.56175px; --dur: 4.581039314311099s; --delay: 0.16359224703821285s; opacity: 0.742098;"></div><div class="star" style="left: 41.8209%; top: 50.6632%; width: 2.05775px; height: 2.05775px; --dur: 2.157350481832808s; --delay: 2.404646241910026s; opacity: 0.276869;"></div><div class="star" style="left: 94.4898%; top: 16.9182%; width: 1.68849px; height: 1.68849px; --dur: 5.168176204725211s; --delay: 3.1161221815928792s; opacity: 0.647743;"></div><div class="star" style="left: 19.1475%; top: 17.4958%; width: 1.83082px; height: 1.83082px; --dur: 3.276118420803394s; --delay: 0.34031475906274256s; opacity: 0.697823;"></div><div class="star" style="left: 60.9162%; top: 75.7437%; width: 2.15279px; height: 2.15279px; --dur: 4.763577421741864s; --delay: 4.251909648407654s; opacity: 0.441304;"></div><div class="star" style="left: 31.5753%; top: 61.5392%; width: 0.970916px; height: 0.970916px; --dur: 4.377126852965938s; --delay: 3.7180881108107693s; opacity: 0.764535;"></div><div class="star" style="left: 6.65446%; top: 99.4797%; width: 1.92763px; height: 1.92763px; --dur: 5.400304895338071s; --delay: 2.853357021540799s; opacity: 0.381437;"></div><div class="star" style="left: 86.5514%; top: 3.66691%; width: 2.04508px; height: 2.04508px; --dur: 5.096796547535314s; --delay: 2.4970952806622035s; opacity: 0.271546;"></div><div class="star" style="left: 16.287%; top: 56.3167%; width: 1.3705px; height: 1.3705px; --dur: 3.7864917736723775s; --delay: 1.4501343114631076s; opacity: 0.351477;"></div><div class="star" style="left: 27.9256%; top: 89.6438%; width: 1.14342px; height: 1.14342px; --dur: 4.652359507524533s; --delay: 1.3173365960942973s; opacity: 0.252005;"></div><div class="star" style="left: 66.0744%; top: 39.8385%; width: 2.44532px; height: 2.44532px; --dur: 3.029879356180957s; --delay: 1.3248034747212445s; opacity: 0.402199;"></div><div class="star" style="left: 5.52148%; top: 6.19552%; width: 1.01501px; height: 1.01501px; --dur: 3.681379039578718s; --delay: 3.998556110262162s; opacity: 0.41266;"></div><div class="star" style="left: 20.4659%; top: 60.2369%; width: 0.560898px; height: 0.560898px; --dur: 5.556653167936362s; --delay: 1.6085995263059312s; opacity: 0.207297;"></div><div class="star" style="left: 89.9348%; top: 59.6587%; width: 2.32857px; height: 2.32857px; --dur: 3.2674728326686604s; --delay: 2.2581957146149416s; opacity: 0.283085;"></div><div class="star" style="left: 14.7717%; top: 8.19369%; width: 2.19723px; height: 2.19723px; --dur: 4.698608215177607s; --delay: 3.0286199677792167s; opacity: 0.303659;"></div><div class="star" style="left: 35.9454%; top: 85.3547%; width: 2.39752px; height: 2.39752px; --dur: 5.191462179235488s; --delay: 3.950070061225082s; opacity: 0.734597;"></div><div class="star" style="left: 24.5679%; top: 75.8653%; width: 1.96855px; height: 1.96855px; --dur: 4.891538750127911s; --delay: 2.4250894949726343s; opacity: 0.365649;"></div><div class="star" style="left: 26.0394%; top: 61.0394%; width: 1.3294px; height: 1.3294px; --dur: 5.863994675923001s; --delay: 3.161226387197665s; opacity: 0.250513;"></div><div class="star" style="left: 38.3559%; top: 63.9787%; width: 1.8067px; height: 1.8067px; --dur: 2.351435585910624s; --delay: 2.9709423651367084s; opacity: 0.636934;"></div><div class="star" style="left: 2.62815%; top: 43.2144%; width: 1.43382px; height: 1.43382px; --dur: 5.508783118022924s; --delay: 1.6734611138348003s; opacity: 0.383936;"></div><div class="star" style="left: 40.4327%; top: 87.1629%; width: 1.5192px; height: 1.5192px; --dur: 5.250299648660915s; --delay: 4.1328494919973275s; opacity: 0.259836;"></div><div class="star" style="left: 65.8614%; top: 13.4504%; width: 0.731445px; height: 0.731445px; --dur: 2.5383795062132983s; --delay: 0.37012045018074535s; opacity: 0.330425;"></div><div class="star" style="left: 61.0221%; top: 37.002%; width: 2.3052px; height: 2.3052px; --dur: 3.237590229939906s; --delay: 4.311511398289597s; opacity: 0.334942;"></div><div class="star" style="left: 40.4743%; top: 9.89091%; width: 2.11491px; height: 2.11491px; --dur: 4.815039535799107s; --delay: 2.708318326201002s; opacity: 0.73827;"></div><div class="star" style="left: 12.8845%; top: 32.0542%; width: 0.941976px; height: 0.941976px; --dur: 4.446806398079726s; --delay: 3.8935965527812795s; opacity: 0.275638;"></div><div class="star" style="left: 87.0293%; top: 55.0965%; width: 1.5658px; height: 1.5658px; --dur: 5.151294519029241s; --delay: 2.2600288481435364s; opacity: 0.681007;"></div><div class="star" style="left: 9.63958%; top: 92.7047%; width: 1.08605px; height: 1.08605px; --dur: 3.994695921130175s; --delay: 0.5918041167688054s; opacity: 0.754321;"></div><div class="star" style="left: 59.515%; top: 5.5137%; width: 2.87897px; height: 2.87897px; --dur: 5.052045980601301s; --delay: 3.316812153459105s; opacity: 0.49879;"></div><div class="star" style="left: 94.294%; top: 91.9789%; width: 1.95815px; height: 1.95815px; --dur: 3.306259292250858s; --delay: 0.10646089356415367s; opacity: 0.742498;"></div><div class="star" style="left: 99.8544%; top: 2.27345%; width: 2.46705px; height: 2.46705px; --dur: 3.0689614975769786s; --delay: 1.1662992696708274s; opacity: 0.568586;"></div><div class="star" style="left: 42.592%; top: 55.805%; width: 1.36359px; height: 1.36359px; --dur: 3.1941708023110973s; --delay: 1.632526258805962s; opacity: 0.530623;"></div><div class="star" style="left: 85.3501%; top: 4.06334%; width: 1.22699px; height: 1.22699px; --dur: 4.84096116907221s; --delay: 3.4677887294117964s; opacity: 0.209809;"></div><div class="star" style="left: 40.1338%; top: 1.31964%; width: 1.47117px; height: 1.47117px; --dur: 5.752507965952696s; --delay: 1.7560176053826348s; opacity: 0.427742;"></div><div class="star" style="left: 9.4896%; top: 87.5908%; width: 1.76062px; height: 1.76062px; --dur: 4.092755074840649s; --delay: 3.644371552541283s; opacity: 0.492957;"></div><div class="star" style="left: 39.6649%; top: 56.5014%; width: 2.55325px; height: 2.55325px; --dur: 5.883895899633087s; --delay: 3.9714119662254603s; opacity: 0.619702;"></div><div class="star" style="left: 87.7168%; top: 68.5205%; width: 0.944011px; height: 0.944011px; --dur: 2.756005524699819s; --delay: 4.073718375518395s; opacity: 0.699162;"></div><div class="star" style="left: 77.0608%; top: 73.1588%; width: 1.14709px; height: 1.14709px; --dur: 5.451260393358288s; --delay: 1.7803867081237228s; opacity: 0.731657;"></div><div class="star" style="left: 55.5288%; top: 38.8469%; width: 2.43462px; height: 2.43462px; --dur: 4.023255072828971s; --delay: 1.8851038872862587s; opacity: 0.394164;"></div><div class="star" style="left: 34.9073%; top: 96.7052%; width: 1.95492px; height: 1.95492px; --dur: 4.463085270363377s; --delay: 0.6355418514578914s; opacity: 0.353138;"></div><div class="star" style="left: 86.9595%; top: 13.0763%; width: 1.34663px; height: 1.34663px; --dur: 3.6211235972883182s; --delay: 3.624882099993444s; opacity: 0.204997;"></div><div class="star" style="left: 12.5666%; top: 43.164%; width: 1.18288px; height: 1.18288px; --dur: 2.51189157103895s; --delay: 0.8708419701298931s; opacity: 0.744823;"></div><div class="star" style="left: 7.64931%; top: 85.5643%; width: 2.99101px; height: 2.99101px; --dur: 4.750507102510225s; --delay: 1.057290651670525s; opacity: 0.224582;"></div><div class="star" style="left: 89.7148%; top: 38.5698%; width: 2.27014px; height: 2.27014px; --dur: 2.163681293715068s; --delay: 4.008759646633647s; opacity: 0.712446;"></div><div class="star" style="left: 97.6506%; top: 45.5953%; width: 2.38817px; height: 2.38817px; --dur: 5.045127063334959s; --delay: 4.923286357984237s; opacity: 0.755075;"></div><div class="star" style="left: 98.9848%; top: 12.01%; width: 1.538px; height: 1.538px; --dur: 5.794489415368224s; --delay: 1.532124658330093s; opacity: 0.770359;"></div><div class="star" style="left: 48.6701%; top: 47.7165%; width: 2.25163px; height: 2.25163px; --dur: 2.828957653973538s; --delay: 3.5073846502294765s; opacity: 0.323227;"></div><div class="star" style="left: 55.4825%; top: 2.92433%; width: 2.8013px; height: 2.8013px; --dur: 5.036761900755217s; --delay: 1.808376670092633s; opacity: 0.604213;"></div><div class="star" style="left: 93.2605%; top: 25.6918%; width: 2.21365px; height: 2.21365px; --dur: 5.496728153320776s; --delay: 2.7228218815421448s; opacity: 0.572993;"></div><div class="star" style="left: 8.83397%; top: 98.6229%; width: 1.72882px; height: 1.72882px; --dur: 4.757878471903986s; --delay: 4.739809479414657s; opacity: 0.612644;"></div><div class="star" style="left: 40.1421%; top: 0.650105%; width: 2.21689px; height: 2.21689px; --dur: 4.915553506360693s; --delay: 3.319422646367646s; opacity: 0.413558;"></div><div class="star" style="left: 70.3303%; top: 21.1368%; width: 1.03695px; height: 1.03695px; --dur: 2.475093179267699s; --delay: 4.218332170287396s; opacity: 0.582159;"></div><div class="star" style="left: 41.8362%; top: 0.196241%; width: 2.2473px; height: 2.2473px; --dur: 3.2334557276472182s; --delay: 0.6711670294800609s; opacity: 0.26641;"></div><div class="star" style="left: 96.7734%; top: 48.7605%; width: 1.14733px; height: 1.14733px; --dur: 3.4656385605017808s; --delay: 4.069730605118639s; opacity: 0.219016;"></div><div class="star" style="left: 74.5819%; top: 40.2584%; width: 2.0074px; height: 2.0074px; --dur: 5.166151559446748s; --delay: 2.586371995874333s; opacity: 0.317472;"></div><div class="star" style="left: 94.2182%; top: 89.673%; width: 1.99645px; height: 1.99645px; --dur: 2.587033604092913s; --delay: 4.232640920013781s; opacity: 0.687863;"></div><div class="star" style="left: 0.519219%; top: 24.3766%; width: 2.79921px; height: 2.79921px; --dur: 4.154806000846097s; --delay: 1.7343085614683313s; opacity: 0.4405;"></div><div class="star" style="left: 82.7894%; top: 61.3559%; width: 2.04568px; height: 2.04568px; --dur: 4.847979055073759s; --delay: 0.6189740935805238s; opacity: 0.51512;"></div><div class="star" style="left: 96.5161%; top: 27.0365%; width: 1.46195px; height: 1.46195px; --dur: 3.615760246834417s; --delay: 0.3867907486317307s; opacity: 0.570193;"></div><div class="star" style="left: 44.7689%; top: 80.7863%; width: 1.59378px; height: 1.59378px; --dur: 2.6098754913804645s; --delay: 1.3614408216088614s; opacity: 0.354229;"></div><div class="star" style="left: 80.2606%; top: 72.681%; width: 2.05895px; height: 2.05895px; --dur: 5.232897150332948s; --delay: 2.7508079822349565s; opacity: 0.590536;"></div><div class="star" style="left: 97.8136%; top: 29.7642%; width: 1.04329px; height: 1.04329px; --dur: 5.244713533641349s; --delay: 4.746276402379228s; opacity: 0.367886;"></div><div class="star" style="left: 26.6093%; top: 11.0813%; width: 2.70288px; height: 2.70288px; --dur: 4.636078806515384s; --delay: 2.573157081687989s; opacity: 0.620436;"></div><div class="star" style="left: 58.3946%; top: 57.9182%; width: 2.76546px; height: 2.76546px; --dur: 2.8916574570526596s; --delay: 3.3534717720553813s; opacity: 0.253557;"></div><div class="star" style="left: 59.6999%; top: 57.886%; width: 2.00078px; height: 2.00078px; --dur: 5.791649815267268s; --delay: 3.863528751048295s; opacity: 0.779215;"></div><div class="star" style="left: 86.3568%; top: 56.8687%; width: 1.18488px; height: 1.18488px; --dur: 5.324602410675754s; --delay: 0.8670105999682465s; opacity: 0.232419;"></div><div class="star" style="left: 64.6337%; top: 34.7908%; width: 0.754931px; height: 0.754931px; --dur: 5.979759698400431s; --delay: 3.9200087987419954s; opacity: 0.595157;"></div><div class="star" style="left: 80.9287%; top: 85.1056%; width: 0.662242px; height: 0.662242px; --dur: 2.1785297945508995s; --delay: 1.32884656714638s; opacity: 0.200535;"></div><div class="star" style="left: 0.568132%; top: 69.1143%; width: 1.51345px; height: 1.51345px; --dur: 5.807864312422822s; --delay: 1.363586202588916s; opacity: 0.326348;"></div><div class="star" style="left: 66.8538%; top: 28.3884%; width: 0.582621px; height: 0.582621px; --dur: 4.649895329248685s; --delay: 3.409925884749306s; opacity: 0.781921;"></div><div class="star" style="left: 94.4356%; top: 64.9997%; width: 2.20217px; height: 2.20217px; --dur: 3.6331325753305697s; --delay: 1.8168440924532003s; opacity: 0.530068;"></div><div class="star" style="left: 13.3265%; top: 43.9139%; width: 0.528676px; height: 0.528676px; --dur: 3.659723863573523s; --delay: 1.5733732536051352s; opacity: 0.231858;"></div><div class="star" style="left: 34.1386%; top: 82.6004%; width: 0.792347px; height: 0.792347px; --dur: 3.6589502957387583s; --delay: 2.0144157821253077s; opacity: 0.751028;"></div><div class="star" style="left: 62.0003%; top: 5.15952%; width: 1.8684px; height: 1.8684px; --dur: 4.95103224984002s; --delay: 3.1992018645190474s; opacity: 0.512362;"></div><div class="star" style="left: 1.08382%; top: 20.4382%; width: 0.948498px; height: 0.948498px; --dur: 4.616798195854557s; --delay: 4.448348546673851s; opacity: 0.604607;"></div><div class="star" style="left: 53.4812%; top: 94.1017%; width: 1.24093px; height: 1.24093px; --dur: 3.686833895700222s; --delay: 3.156290786655789s; opacity: 0.46219;"></div><div class="star" style="left: 14.2296%; top: 33.3438%; width: 2.68344px; height: 2.68344px; --dur: 3.787522322201965s; --delay: 0.8864307003133459s; opacity: 0.647682;"></div><div class="star" style="left: 77.8576%; top: 25.597%; width: 1.77056px; height: 1.77056px; --dur: 2.896812796030132s; --delay: 2.61971056173042s; opacity: 0.521837;"></div><div class="star" style="left: 79.2141%; top: 8.85612%; width: 2.96911px; height: 2.96911px; --dur: 5.534007665345014s; --delay: 3.6821992881774017s; opacity: 0.646813;"></div><div class="star" style="left: 64.6245%; top: 3.98559%; width: 2.88802px; height: 2.88802px; --dur: 2.7241137047830586s; --delay: 3.6596963531730853s; opacity: 0.64795;"></div><div class="star" style="left: 44.0206%; top: 68.0735%; width: 0.787833px; height: 0.787833px; --dur: 4.705293394320266s; --delay: 3.1641665878709704s; opacity: 0.396494;"></div><div class="star" style="left: 87.6153%; top: 46.9326%; width: 0.760058px; height: 0.760058px; --dur: 4.669890498168345s; --delay: 2.636816105768269s; opacity: 0.229555;"></div><div class="star" style="left: 12.388%; top: 64.9651%; width: 2.79902px; height: 2.79902px; --dur: 5.596306025637524s; --delay: 0.7693626894838296s; opacity: 0.516194;"></div><div class="star" style="left: 98.2502%; top: 46.5365%; width: 2.77311px; height: 2.77311px; --dur: 4.286252556300768s; --delay: 0.010808049683448395s; opacity: 0.416995;"></div><div class="star" style="left: 38.9916%; top: 66.3234%; width: 2.32889px; height: 2.32889px; --dur: 2.6744765661627823s; --delay: 3.0299378041073197s; opacity: 0.500607;"></div><div class="star" style="left: 49.8546%; top: 19.2565%; width: 0.698501px; height: 0.698501px; --dur: 5.152774585734024s; --delay: 3.974309684568583s; opacity: 0.584438;"></div><div class="star" style="left: 18.5349%; top: 52.7757%; width: 1.54141px; height: 1.54141px; --dur: 2.8034213092399622s; --delay: 4.5488115320598235s; opacity: 0.702345;"></div><div class="star" style="left: 1.75471%; top: 32.773%; width: 0.563402px; height: 0.563402px; --dur: 3.3336038375395143s; --delay: 2.132851731842884s; opacity: 0.49468;"></div><div class="star" style="left: 11.2384%; top: 45.7336%; width: 2.54583px; height: 2.54583px; --dur: 5.925496851892085s; --delay: 3.7508793504405658s; opacity: 0.474866;"></div><div class="star" style="left: 13.4845%; top: 49.3725%; width: 2.37188px; height: 2.37188px; --dur: 2.813479142160493s; --delay: 4.640124831129506s; opacity: 0.58271;"></div></div>
+<div class="deco-circle" style="width:300px;height:300px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(255,110,180,0.08),transparent 70%);"></div>
+<div class="deco-circle" style="width:200px;height:200px;bottom:20%;left:-80px;background:radial-gradient(circle,rgba(167,139,250,0.08),transparent 70%);animation-delay:2s;"></div>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo" id="nav-logo">✦ 祐太</div>
+  <ul class="nav-links">
+    <li><a href="file:///Users/yutasasakura/Downloads/index_1.html#profile">プロフィール</a></li>
+    <li><a href="file:///Users/yutasasakura/Downloads/index_1.html#stats">実績</a></li>
+    <li><a href="file:///Users/yutasasakura/Downloads/index_1.html#videos">動画</a></li>
+    <li><a href="file:///Users/yutasasakura/Downloads/index_1.html#schedule">スケジュール</a></li>
+    <li><a href="file:///Users/yutasasakura/Downloads/index_1.html#gallery">ギャラリー</a></li>
+    <li><a href="file:///Users/yutasasakura/Downloads/index_1.html#contact">お問合わせ</a></li>
+  </ul>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-avatar-wrap">
+    <div class="hero-avatar-ring"></div>
+    <div class="hero-avatar" id="hero-avatar">🌟</div>
+  </div>
+  <p class="hero-ruby" id="hero-ruby">ゆうた</p>
+  <h1 class="hero-name" id="hero-name">祐太</h1>
+  <p class="hero-tagline" id="hero-tagline">✨ 星空からやってきた、歌うバーチャルアイドル ✨</p>
+  <div class="hero-tags" id="hero-tags"><span class="tag ">🎮 ホラーゲーム</span><span class="tag purple">🌙 ASMR</span><span class="tag yellow">💜 乙女ゲー</span><span class="tag ">🐱 猫好き</span></div>
+  <div class="hero-sns" id="hero-sns"><a href="https://x.com/" class="sns-btn twitter" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.18 2.25h6.038l4.26 5.638 5.766-5.638zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg> X / Twitter</a><a href="https://youtube.com/" class="sns-btn youtube" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg> YouTube</a><a href="https://tiktok.com/" class="sns-btn tiktok" target="_blank" rel="noopener">🎵 TikTok</a></div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== PROFILE ===== -->
+<section id="profile">
+  <div class="section-title reveal">👤 プロフィール<span class="en">PROFILE</span></div>
+  <div class="profile-card reveal" id="profile-content">
+    <div class="profile-info-row">
+      <span class="info-label">名前</span>
+      <span class="info-value">
+        祐太（ゆうた）
+        
+      </span>
+    </div>
+  
+    <div class="profile-info-row">
+      <span class="info-label">活動開始</span>
+      <span class="info-value">
+        2022年4月 ✦ 個人勢VTuber
+        
+      </span>
+    </div>
+  
+    <div class="profile-info-row">
+      <span class="info-label">活動内容</span>
+      <span class="info-value">
+        歌ってみた・ゲーム実況・雑談配信・ASMRなど
+        
+      </span>
+    </div>
+  
+    <div class="profile-info-row">
+      <span class="info-label">得意ジャンル</span>
+      <span class="info-value">
+        <span class="tag" style="font-size:0.78rem">🎮 ホラーゲーム</span><span class="tag" style="font-size:0.78rem">🌙 ASMR</span><span class="tag" style="font-size:0.78rem">💜 乙女ゲー</span><span class="tag" style="font-size:0.78rem">🐱 猫好き</span>
+        
+      </span>
+    </div>
+  
+    <div class="profile-info-row">
+      <span class="info-label">自己紹介</span>
+      <span class="info-value">
+        星の海から降りてきた、ふわふわ系VTuberです✨
+        
+      </span>
+    </div>
+  
+    <div class="profile-info-row">
+      <span class="info-label">ファンネーム</span>
+      <span class="info-value">
+        ⭐ ひかりん
+        
+      </span>
+    </div>
+  
+    <div class="profile-info-row">
+      <span class="info-label">ハッシュタグ</span>
+      <span class="info-value" style="color:var(--primary)">
+        #星野ひかり配信 ／ #星野ひかりファンアート
+        
+      </span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== STATS ===== -->
+<section id="stats">
+  <div class="section-title reveal">📊 活動実績<span class="en">ACHIEVEMENTS</span></div>
+  <div class="stats-grid reveal" id="stats-numbers">
+    <div class="stat-card">
+      <div class="stat-num">100</div>
+      <div class="stat-label">YouTube 登録者</div>
+    </div>
+  
+    <div class="stat-card">
+      <div class="stat-num">28K+</div>
+      <div class="stat-label">X フォロワー</div>
+    </div>
+  
+    <div class="stat-card">
+      <div class="stat-num">300+</div>
+      <div class="stat-label">総配信回数</div>
+    </div>
+  
+    <div class="stat-card">
+      <div class="stat-num">150+</div>
+      <div class="stat-label">歌ってみた投稿数</div>
+    </div>
+  </div>
+  <div class="collab-list reveal" id="stats-history">
+    <div class="collab-item">
+      <span class="collab-badge コラボ">コラボ</span>
+      <span>〇〇VTuber様 × 2023年6月 / ゲーム配信コラボ</span>
+    </div>
+  
+    <div class="collab-item">
+      <span class="collab-badge イベント">イベント</span>
+      <span>VTuber歌フェス2023 出演 / 歌唱パート担当</span>
+    </div>
+  
+    <div class="collab-item">
+      <span class="collab-badge 受賞">受賞</span>
+      <span>△△コンテスト 歌ってみた部門 優秀賞 / 2024年1月</span>
+    </div>
+  
+    <div class="collab-item">
+      <span class="collab-badge コラボ">コラボ</span>
+      <span>□□ゲームメーカー様 タイアップ配信 / 2024年3月</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== VIDEOS ===== -->
+<section id="videos">
+  <div class="section-title reveal">🎬 動画 / 配信<span class="en">VIDEOS</span></div>
+  <div class="video-grid reveal" id="videos-content">
+    <div class="video-card">
+      <div class="video-embed">
+        <iframe src="./祐太_files/dQw4w9WgXcQ.html" allowfullscreen="" loading="lazy" title="🎵 おすすめの歌ってみた"></iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-title">🎵 おすすめの歌ってみた</div>
+        <div class="video-meta">2024-02-29T15:00:00.000Z ／ 再生数 12万回</div>
+      </div>
+    </div>
+  
+    <div class="video-card">
+      <div class="video-embed">
+        <iframe src="./祐太_files/dQw4w9WgXcQ(1).html" allowfullscreen="" loading="lazy" title="🎮 ホラーゲーム実況 初見"></iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-title">🎮 ホラーゲーム実況 初見</div>
+        <div class="video-meta">2024-01-31T15:00:00.000Z ／ 再生数 8万回</div>
+      </div>
+    </div>
+  
+    <div class="video-card">
+      <div class="video-embed">
+        <iframe src="./祐太_files/dQw4w9WgXcQ(2).html" allowfullscreen="" loading="lazy" title="✨ 誕生日記念配信"></iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-title">✨ 誕生日記念配信</div>
+        <div class="video-meta">2023-12-31T15:00:00.000Z ／ 再生数 25万回</div>
+      </div>
+    </div>
+  
+    <div class="video-card">
+      <div class="video-embed">
+        <iframe src="./祐太_files/dQw4w9WgXcQ(3).html" allowfullscreen="" loading="lazy" title="🌙 深夜ASMR配信"></iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-title">🌙 深夜ASMR配信</div>
+        <div class="video-meta">2024-01-31T15:00:00.000Z ／ 再生数 6万回</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== SCHEDULE ===== -->
+<section id="schedule">
+  <div class="section-title reveal">📅 配信スケジュール<span class="en">SCHEDULE</span></div>
+  <div class="schedule-list reveal" id="schedule-content">
+    <div class="schedule-item">
+      <div class="schedule-date">
+        <div class="schedule-month">4月</div>
+        <div class="schedule-day">1</div>
+      </div>
+      <div class="schedule-divider"></div>
+      <div class="schedule-content-inner" style="flex:1">
+        <div class="schedule-title-text">🎮 ホラーゲーム実況「〇〇」初見プレイ</div>
+        <div class="schedule-time">22:00〜 / YouTube Live</div>
+      </div>
+      <span class="schedule-type LIVE">LIVE</span>
+    </div>
+  
+    <div class="schedule-item">
+      <div class="schedule-date">
+        <div class="schedule-month">4月</div>
+        <div class="schedule-day">3</div>
+      </div>
+      <div class="schedule-divider"></div>
+      <div class="schedule-content-inner" style="flex:1">
+        <div class="schedule-title-text">🎵 歌枠 ＋ △△VTuber様とのコラボ配信</div>
+        <div class="schedule-time">21:00〜 / YouTube Live</div>
+      </div>
+      <span class="schedule-type コラボ">コラボ</span>
+    </div>
+  
+    <div class="schedule-item">
+      <div class="schedule-date">
+        <div class="schedule-month">4月</div>
+        <div class="schedule-day">5</div>
+      </div>
+      <div class="schedule-divider"></div>
+      <div class="schedule-content-inner" style="flex:1">
+        <div class="schedule-title-text">💬 雑談配信 ＋ Q&amp;Aコーナー</div>
+        <div class="schedule-time">22:00〜 / YouTube Live</div>
+      </div>
+      <span class="schedule-type LIVE">LIVE</span>
+    </div>
+  
+    <div class="schedule-item">
+      <div class="schedule-date">
+        <div class="schedule-month">4月</div>
+        <div class="schedule-day">10</div>
+      </div>
+      <div class="schedule-divider"></div>
+      <div class="schedule-content-inner" style="flex:1">
+        <div class="schedule-title-text">✨ VTuberフェス2024 出演</div>
+        <div class="schedule-time">14:00〜 / YouTube Live</div>
+      </div>
+      <span class="schedule-type イベント">イベント</span>
+    </div>
+  
+    <div class="schedule-item">
+      <div class="schedule-date">
+        <div class="schedule-month">4月</div>
+        <div class="schedule-day">15</div>
+      </div>
+      <div class="schedule-divider"></div>
+      <div class="schedule-content-inner" style="flex:1">
+        <div class="schedule-title-text">🌙 深夜ASMR配信</div>
+        <div class="schedule-time">24:00〜 / YouTube Live</div>
+      </div>
+      <span class="schedule-type LIVE">LIVE</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== GALLERY ===== -->
+<section id="gallery">
+  <div class="section-title reveal">🎨 ファンアートギャラリー<span class="en">FAN ART GALLERY</span></div>
+  <p style="text-align:center;color:var(--text-muted);font-size:0.85rem;margin-bottom:24px;font-weight:700;" class="reveal" id="gallery-tag">ファンアートのタグ → <span style="color:var(--primary)">#星野ひかりファンアート</span> 💕</p>
+  <div class="gallery-grid reveal" id="gallery-content">
+      <div class="gallery-item large" style="background:linear-gradient(135deg,#2a1850,#3d1f6e)">
+        <span>🌟</span>
+        <div class="gallery-overlay">
+          <span class="gallery-credit">🎨 Illust by ○○さん</span>
+        </div>
+      </div>
+    
+      <div class="gallery-item" style="background:linear-gradient(135deg,#1a2a50,#1f3a6e)">
+        <span>✨</span>
+        <div class="gallery-overlay">
+          <span class="gallery-credit">🎨 Illust by △△さん</span>
+        </div>
+      </div>
+    
+      <div class="gallery-item" style="background:linear-gradient(135deg,#50182a,#6e1f3d)">
+        <span>🌸</span>
+        <div class="gallery-overlay">
+          <span class="gallery-credit">🎨 Illust by □□さん</span>
+        </div>
+      </div>
+    
+      <div class="gallery-item" style="background:linear-gradient(135deg,#181a50,#2a1f6e)">
+        <span>🎵</span>
+        <div class="gallery-overlay">
+          <span class="gallery-credit">🎨 Illust by ◇◇さん</span>
+        </div>
+      </div>
+    
+      <div class="gallery-item" style="background:linear-gradient(135deg,#1a3a2a,#1f6e4a)">
+        <span>🐱</span>
+        <div class="gallery-overlay">
+          <span class="gallery-credit">🎨 Illust by ××さん</span>
+        </div>
+      </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== LINKS ===== -->
+<section id="links">
+  <div class="section-title reveal">🔗 リンク集<span class="en">LINKS</span></div>
+  <div class="links-grid reveal" id="links-content">
+    <a href="https://x.com/" class="link-card" target="_blank" rel="noopener">
+      <div class="link-icon tw"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.18 2.25h6.038l4.26 5.638 5.766-5.638zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></div>
+      <div>
+        <div class="link-text-main">X / Twitter</div>
+        <div class="link-text-sub">@hoshinohikari_v</div>
+      </div>
+    </a>
+  
+    <a href="https://youtube.com/" class="link-card" target="_blank" rel="noopener">
+      <div class="link-icon yt"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"></path></svg></div>
+      <div>
+        <div class="link-text-main">YouTube</div>
+        <div class="link-text-sub">星野ひかりch.</div>
+      </div>
+    </a>
+  
+    <a href="https://tiktok.com/" class="link-card" target="_blank" rel="noopener">
+      <div class="link-icon tt">🎵</div>
+      <div>
+        <div class="link-text-main">TikTok</div>
+        <div class="link-text-sub">@hoshinohikari</div>
+      </div>
+    </a>
+  
+    <a href="https://booth.pm/" class="link-card" target="_blank" rel="noopener">
+      <div class="link-icon bo">🛍</div>
+      <div>
+        <div class="link-text-main">BOOTH</div>
+        <div class="link-text-sub">グッズ・ボイス販売</div>
+      </div>
+    </a>
+  
+    <a href="https://nicovideo.jp/" class="link-card" target="_blank" rel="noopener">
+      <div class="link-icon ni">▶</div>
+      <div>
+        <div class="link-text-main">ニコニコ動画</div>
+        <div class="link-text-sub">歌ってみたアーカイブ</div>
+      </div>
+    </a>
+  
+    <a href="https://discord.com/" class="link-card" target="_blank" rel="noopener">
+      <div class="link-icon dc">💬</div>
+      <div>
+        <div class="link-text-main">Discord</div>
+        <div class="link-text-sub">ファンサーバー</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="section-title reveal">📩 お問い合わせ<span class="en">CONTACT</span></div>
+  <div class="contact-box reveal" id="contact-content">
+    <p>お仕事のご依頼・コラボのご相談はこちらからお気軽にどうぞ！🌟<br>ゲームタイアップ・歌唱依頼・イベント出演・グッズ制作など幅広くご相談受け付けています。<br><br>返信まで数日いただく場合があります。お急ぎの場合はDMもご活用ください💌</p>
+    <div class="contact-methods" id="contact-methods">
+    <a href="mailto:your-email@example.com" class="contact-btn primary">📧 メールで問い合わせ</a>
+    <a href="https://x.com/your_account" class="contact-btn" target="_blank" rel="noopener">🐦 X のDMはこちら</a>
+  </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-name" id="footer-name">✦ 祐太（ゆうた） ✦</div>
+  <p id="footer-copy">© 2026 祐太. All Rights Reserved.</p>
+  <p style="margin-top:6px;font-size:0.75rem;" id="footer-tags">二次創作ガイドライン ／ ファンアートタグ: <span style="color:var(--primary)">#星野ひかりファンアート</span></p>
+</footer>
+
+<script>
+// ================================================================
+// DATA RENDERING FUNCTIONS
+// ================================================================
+
+function renderProfile(p) {
+  const name = p['名前'] || '';
+  const reading = name.match(/（(.+)）/)?.[1] || '';
+
+  // Nav & footer
+  document.getElementById('nav-logo').textContent = '✦ ' + (name.replace(/（.+）/,'') || 'VTuber');
+  document.getElementById('footer-name').textContent = '✦ ' + name + ' ✦';
+  document.getElementById('footer-copy').textContent = `© ${new Date().getFullYear()} ${name.replace(/（.+）/,'')}. All Rights Reserved.`;
+  document.title = (name.replace(/（.+）/,'') || 'VTuber') + ' - プロフィール';
+
+  // Hero
+  document.getElementById('hero-ruby').textContent = reading ? reading.split('').join('') : '';
+  document.getElementById('hero-name').textContent = name.replace(/（.+）/,'');
+  document.getElementById('hero-tagline').textContent = p['キャッチコピー'] || '';
+
+  // Tags from 得意ジャンル
+  const tagsEl = document.getElementById('hero-tags');
+  const genreIcons = { 'アニソン':'🎵','ホラーゲーム':'🎮','ASMR':'🌙','乙女ゲー':'💜','猫好き':'🐱' };
+  const tagClasses = ['','purple','yellow','','purple'];
+  const genres = (p['得意ジャンル'] || '').split(',').map(s => s.trim()).filter(Boolean);
+  genres.forEach((g, i) => {
+    const span = document.createElement('span');
+    span.className = 'tag ' + (tagClasses[i % tagClasses.length]);
+    span.textContent = (genreIcons[g] || '✦') + ' ' + g;
+    tagsEl.appendChild(span);
+  });
+
+  // Profile card
+  const rows = [
+    { label:'名前',         value: name },
+    { label:'活動開始',     value: p['活動開始'] || '' },
+    { label:'活動内容',     value: p['活動内容'] || '' },
+    { label:'得意ジャンル', genres: genres },
+    { label:'自己紹介',     value: p['自己紹介'] || '' },
+    { label:'ファンネーム', value: '⭐ ' + (p['ファンネーム'] || '') },
+    { label:'ハッシュタグ', value: (p['配信タグ'] || '') + ' ／ ' + (p['ファンアートタグ'] || ''), pink: true },
+  ];
+
+  document.getElementById('profile-content').innerHTML = rows.map(r => `
+    <div class="profile-info-row">
+      <span class="info-label">${r.label}</span>
+      <span class="info-value" ${r.pink ? 'style="color:var(--primary)"' : ''}>
+        ${r.genres
+          ? r.genres.map(g => `<span class="tag" style="font-size:0.78rem">${(genreIcons[g]||'✦')} ${g}</span>`).join('')
+          : escHtml(r.value)}
+        ${r.genres ? '' : ''}
+      </span>
+    </div>
+  `).join('');
+
+  // Gallery tag
+  const fanTag = p['ファンアートタグ'] || '';
+  document.getElementById('gallery-tag').innerHTML =
+    `ファンアートのタグ → <span style="color:var(--primary)">${escHtml(fanTag)}</span> 💕`;
+
+  // Footer tags
+  document.getElementById('footer-tags').innerHTML =
+    `二次創作ガイドライン ／ ファンアートタグ: <span style="color:var(--primary)">${escHtml(fanTag)}</span>`;
+
+  // SNS links (from links sheet - rendered later, but add basic hero buttons now)
+}
+
+function renderHeroSNS(links) {
+  const snsEl = document.getElementById('hero-sns');
+  snsEl.innerHTML = '';
+  const snsMap = {
+    'tw': { cls: 'twitter', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.18 2.25h6.038l4.26 5.638 5.766-5.638zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>` },
+    'yt': { cls: 'youtube', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>` },
+    'tt': { cls: 'tiktok', icon: '🎵' },
+  };
+  ['tw','yt','tt'].forEach(kind => {
+    const link = links.find(l => l['アイコン種別'] === kind);
+    if (!link || !link['URL'] || link['URL'] === '#') return;
+    const btn = document.createElement('a');
+    btn.href = link['URL'];
+    btn.className = 'sns-btn ' + (snsMap[kind]?.cls || '');
+    btn.target = '_blank';
+    btn.rel = 'noopener';
+    btn.innerHTML = (snsMap[kind]?.icon || '') + ' ' + link['サービス名'];
+    snsEl.appendChild(btn);
+  });
+}
+
+function renderStats(stats) {
+  // Numbers
+  document.getElementById('stats-numbers').innerHTML = stats.numbers.map(r => `
+    <div class="stat-card">
+      <div class="stat-num">${escHtml(String(r['数値']))}</div>
+      <div class="stat-label">${escHtml(r['ラベル'])}</div>
+    </div>
+  `).join('');
+
+  // History
+  document.getElementById('stats-history').innerHTML = stats.history.map(r => `
+    <div class="collab-item">
+      <span class="collab-badge ${escHtml(r['種別'])}">${escHtml(r['種別'])}</span>
+      <span>${escHtml(r['ラベル'])}</span>
+    </div>
+  `).join('');
+}
+
+function renderVideos(videos) {
+  document.getElementById('videos-content').innerHTML = videos.map(v => `
+    <div class="video-card">
+      <div class="video-embed">
+        <iframe src="https://www.youtube.com/embed/${escHtml(v['YouTube動画ID'])}"
+          allowfullscreen loading="lazy" title="${escHtml(v['タイトル'])}"></iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-title">${escHtml(v['タイトル'])}</div>
+        <div class="video-meta">${escHtml(v['日付'])} ／ 再生数 ${escHtml(v['再生数'])}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderSchedule(schedule) {
+  if (!schedule.length) {
+    document.getElementById('schedule-content').innerHTML =
+      '<p style="text-align:center;color:var(--text-muted);padding:24px;">現在スケジュールはありません</p>';
+    return;
+  }
+  document.getElementById('schedule-content').innerHTML = schedule.map(r => `
+    <div class="schedule-item">
+      <div class="schedule-date">
+        <div class="schedule-month">${escHtml(r['月'])}</div>
+        <div class="schedule-day">${escHtml(r['日'])}</div>
+      </div>
+      <div class="schedule-divider"></div>
+      <div class="schedule-content-inner" style="flex:1">
+        <div class="schedule-title-text">${escHtml(r['タイトル'])}</div>
+        <div class="schedule-time">${escHtml(r['時間'])} / YouTube Live</div>
+      </div>
+      <span class="schedule-type ${escHtml(r['種別'])}">${escHtml(r['種別'])}</span>
+    </div>
+  `).join('');
+}
+
+function renderGallery(gallery) {
+  const bgColors = [
+    'linear-gradient(135deg,#2a1850,#3d1f6e)',
+    'linear-gradient(135deg,#1a2a50,#1f3a6e)',
+    'linear-gradient(135deg,#50182a,#6e1f3d)',
+    'linear-gradient(135deg,#181a50,#2a1f6e)',
+    'linear-gradient(135deg,#1a3a2a,#1f6e4a)',
+    'linear-gradient(135deg,#3a1a50,#5a1f6e)',
+  ];
+  document.getElementById('gallery-content').innerHTML = gallery.map((g, i) => {
+    const isLarge = g['サイズ（large/normal）'] === 'large';
+    const hasImg = g['画像URL'] && g['画像URL'].trim();
+    return `
+      <div class="gallery-item${isLarge ? ' large' : ''}" style="background:${bgColors[i % bgColors.length]}">
+        ${hasImg
+          ? `<img class="gallery-img" src="${escHtml(g['画像URL'])}" alt="ファンアート by ${escHtml(g['作者名'])}" loading="lazy">`
+          : `<span>${escHtml(g['絵文字'])}</span>`
+        }
+        <div class="gallery-overlay">
+          <span class="gallery-credit">🎨 Illust by ${escHtml(g['作者名'])}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderLinks(links) {
+  const iconSVG = {
+    tw: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L2.18 2.25h6.038l4.26 5.638 5.766-5.638zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
+    yt: `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+    tt: '🎵', bo: '🛍', ni: '▶', dc: '💬',
+  };
+  document.getElementById('links-content').innerHTML = links.map(l => `
+    <a href="${escHtml(l['URL'])}" class="link-card" target="_blank" rel="noopener">
+      <div class="link-icon ${escHtml(l['アイコン種別'])}">${iconSVG[l['アイコン種別']] || '🔗'}</div>
+      <div>
+        <div class="link-text-main">${escHtml(l['サービス名'])}</div>
+        <div class="link-text-sub">${escHtml(l['サブテキスト'])}</div>
+      </div>
+    </a>
+  `).join('');
+}
+
+function renderContact() {
+  document.getElementById('contact-methods').innerHTML = `
+    <a href="mailto:${CONTACT.email}" class="contact-btn primary">📧 メールで問い合わせ</a>
+    <a href="${CONTACT.twitter_url}" class="contact-btn" target="_blank" rel="noopener">🐦 X のDMはこちら</a>
+  `;
+}
+
+// ================================================================
+// MAIN: FETCH & RENDER
+// ================================================================
+async function loadData() {
+  // API URLが設定されていない場合はデモデータを使う
+  if (!SHEET_API_URL || SHEET_API_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
+    console.warn('SHEET_API_URL が設定されていません。デモデータを表示します。');
+    renderWithDemoData();
+    hideLoading();
+    return;
+  }
+
+  try {
+    const res = await fetch(SHEET_API_URL + '?section=all');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    renderProfile(data.profile || {});
+    renderStats(data.stats || { numbers: [], history: [] });
+    renderVideos(data.videos || []);
+    renderSchedule(data.schedule || []);
+    renderGallery(data.gallery || []);
+    renderLinks(data.links || []);
+    renderHeroSNS(data.links || []);
+    renderContact();
+
+  } catch(err) {
+    showError('データの読み込みに失敗しました: ' + err.message);
+    renderWithDemoData();
+  } finally {
+    hideLoading();
+  }
+}
+
+function renderWithDemoData() {
+  // フォールバック用デモデータ
+  renderProfile({
+    '名前': '星野ひかり（ほしのひかり）',
+    '活動開始': '2022年4月 ✦ 個人勢VTuber',
+    '活動内容': '歌ってみた・ゲーム実況・雑談配信・ASMRなど',
+    '得意ジャンル': 'アニソン,ホラーゲーム,ASMR,乙女ゲー,猫好き',
+    '自己紹介': '星の海から降りてきた、ふわふわ系VTuberです✨ 歌とゲームと雑談が大好き！',
+    'ファンネーム': 'ひかりん',
+    '配信タグ': '#星野ひかり配信',
+    'ファンアートタグ': '#星野ひかりファンアート',
+    'キャッチコピー': '✨ 星空からやってきた、歌うバーチャルアイドル ✨',
+  });
+  renderStats({
+    numbers: [
+      { 'ラベル': 'YouTube 登録者', '数値': '42K+' },
+      { 'ラベル': 'X フォロワー', '数値': '28K+' },
+      { 'ラベル': '総配信回数', '数値': '300+' },
+      { 'ラベル': '歌ってみた投稿数', '数値': '150+' },
+    ],
+    history: [
+      { '種別': 'コラボ',   'ラベル': '〇〇VTuber様 × 2023年6月 / ゲーム配信コラボ' },
+      { '種別': 'イベント', 'ラベル': 'VTuber歌フェス2023 出演 / 歌唱パート担当' },
+      { '種別': '受賞',     'ラベル': '△△コンテスト 歌ってみた部門 優秀賞 / 2024年1月' },
+      { '種別': 'コラボ',   'ラベル': '□□ゲームメーカー様 タイアップ配信 / 2024年3月' },
+    ],
+  });
+  renderVideos([
+    { 'タイトル': '🎵 おすすめの歌ってみた', 'YouTube動画ID': 'dQw4w9WgXcQ', '日付': '2024年3月', '再生数': '12万回' },
+    { 'タイトル': '🎮 ホラーゲーム実況',     'YouTube動画ID': 'dQw4w9WgXcQ', '日付': '2024年2月', '再生数': '8万回' },
+    { 'タイトル': '✨ 誕生日記念配信',        'YouTube動画ID': 'dQw4w9WgXcQ', '日付': '2024年1月', '再生数': '25万回' },
+    { 'タイトル': '🌙 深夜ASMR配信',         'YouTube動画ID': 'dQw4w9WgXcQ', '日付': '2024年2月', '再生数': '6万回' },
+  ]);
+  renderSchedule([
+    { '月': '4月', '日': '01', 'タイトル': '🎮 ホラーゲーム実況「〇〇」初見プレイ', '時間': '22:00〜', '種別': 'LIVE' },
+    { '月': '4月', '日': '03', 'タイトル': '🎵 歌枠 ＋ △△VTuber様とのコラボ配信', '時間': '21:00〜', '種別': 'コラボ' },
+    { '月': '4月', '日': '05', 'タイトル': '💬 雑談配信 ＋ Q&Aコーナー',             '時間': '22:00〜', '種別': 'LIVE' },
+    { '月': '4月', '日': '10', 'タイトル': '✨ VTuberフェス2024 出演',                '時間': '14:00〜', '種別': 'イベント' },
+  ]);
+  renderGallery([
+    { '絵文字': '🌟', '作者名': '○○さん', 'サイズ（large/normal）': 'large', '画像URL': '' },
+    { '絵文字': '✨', '作者名': '△△さん', 'サイズ（large/normal）': 'normal', '画像URL': '' },
+    { '絵文字': '🌸', '作者名': '□□さん', 'サイズ（large/normal）': 'normal', '画像URL': '' },
+    { '絵文字': '🎵', '作者名': '◇◇さん', 'サイズ（large/normal）': 'normal', '画像URL': '' },
+    { '絵文字': '🐱', '作者名': '××さん', 'サイズ（large/normal）': 'normal', '画像URL': '' },
+  ]);
+  renderLinks([
+    { 'サービス名': 'X / Twitter', 'URL': '#', 'サブテキスト': '@hoshinohikari_v', 'アイコン種別': 'tw' },
+    { 'サービス名': 'YouTube',     'URL': '#', 'サブテキスト': '星野ひかりch.',    'アイコン種別': 'yt' },
+    { 'サービス名': 'TikTok',      'URL': '#', 'サブテキスト': '@hoshinohikari',   'アイコン種別': 'tt' },
+    { 'サービス名': 'BOOTH',       'URL': '#', 'サブテキスト': 'グッズ・ボイス販売','アイコン種別': 'bo' },
+    { 'サービス名': 'ニコニコ動画', 'URL': '#', 'サブテキスト': '歌ってみたアーカイブ','アイコン種別': 'ni' },
+    { 'サービス名': 'Discord',     'URL': '#', 'サブテキスト': 'ファンサーバー',    'アイコン種別': 'dc' },
+  ]);
+  renderContact();
+}
+
+function hideLoading() {
+  document.getElementById('loading-screen').classList.add('hidden');
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-banner');
+  el.textContent = '⚠ ' + msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 6000);
+}
+
+function escHtml(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ================================================================
+// STARS & SCROLL REVEAL
+// ================================================================
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${size}px;height:${size}px;--dur:${2+Math.random()*4}s;--delay:${Math.random()*5}s;opacity:${Math.random()*0.6+0.2};`;
+  starsEl.appendChild(s);
+}
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+  navLinks.forEach(a => {
+    const active = a.getAttribute('href') === '#' + current;
+    a.style.color = active ? 'var(--primary)' : '';
+    a.style.background = active ? 'rgba(255,110,180,0.12)' : '';
+  });
+});
+
+// START
+loadData();
+</script>
+
+
+</body></html>
